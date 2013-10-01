@@ -1,0 +1,29 @@
+Tagging:
+    Enabled: true             #Turns off making people unsafe
+    NameTag Color: 'c'        #Color that the nametag of unsafe people will be
+    Prevent Teleport: true    #Players who are tagged can/cannot teleport
+    Remove Invisible: false   #Makes people who are unsafe visible
+    Disable Enderpearls: true #Disables enderpearls for people who are unsafe
+    Anti Pilejump: true       #Only the people who were PVPing in the unsafe zone can continue to pvp
+    Disable Flying: true      #Stops flight for those who aren't safe
+    Safe Time: 20
+    Disabled Worlds: 'example1,example2'
+    Use TagAPI: true          #Set to false to use scoreboard instead
+    Disabled Commands: 'warp,heal'
+    Commands:
+        Enabled: false
+        Console Unsafe: 'gamemode PLAYER 0,say &4Announcement: &6PLAYER &chas just become unsafe at PLAYERLOCATION'
+        Player Unsafe: 'md'
+        Console Safe: 'heal PLAYER'
+        Player Safe: 'home'
+        PLAYERLOCATION Setup: 'x: X, y: Y, z: Z in world WORLD'
+Death:
+    DeathTP Enabled: false
+    DeathTP Time: 20         #Amount of seconds before players can teleport after death
+PvPLogger Zombie:
+    Enabled: true
+    Keep Player Health: true #Set true to make the zombie spawn with the player's health
+    Health: 50
+Scoreboard Display:
+    Safe Time: true
+    Health: true

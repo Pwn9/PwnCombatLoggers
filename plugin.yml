@@ -1,0 +1,37 @@
+name: PwnCombatLoggers
+version: 0.5
+author: tremor77
+description: Pwn9 implementation of the PvPTag Plugin
+website: http://pwn9.com
+main: com.pwn9.PwnCombatLoggers.PwnCombatLoggers
+softdepend: [TagAPI]
+commands:
+   callsafe:
+      description: Make a player safe from attack
+      aliases: csafe
+      usage: /callsafe <player>
+      permission: pwncl.callsafe
+      permission-message: You dont have permission for this command
+   callhit:
+      description: Make a player vulnerable to attack
+      aliases: chit
+      usage: /callhit <player>
+      permission: pwncl.callhit
+      permission-message: You dont have permission for this command
+   pwncl:
+      description: pwncl's technical command
+      usage: /pwncl <reload|setcolor <color>>
+      permission: pwncl.pwncl
+      permission-message: You dont have permission for this command
+      
+permissions:
+  pwncl.*:
+    description: gives all permissions of PwnCombatLoggers
+    default: op
+    children:
+        pwncl.pwncl: true
+        pwncl.callhit: true
+        pwncl.callsafe: true
+        pwncl.notag: true
+  pwnncl.notag:
+    description: Gives permission to not get tagged    
