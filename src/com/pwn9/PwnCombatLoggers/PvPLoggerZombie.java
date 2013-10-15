@@ -73,7 +73,9 @@ public class PvPLoggerZombie
    public void invFromPlayer(Player p) 
    {
 	  PlayerInventory pi = p.getInventory(); 	   
-      zombie.setMaxHealth(getHealth());
+      //zombie.setMaxHealth(getHealth());   not sure what they were doing here...  
+	  // (args.length > 0) ? 1 : 2;  - or set to 20..  this probably works better
+      zombie.setMaxHealth((getHealth() == 0) ? 1 : getHealth());
       zombie.setHealth(getHealth());
       zombie.setRemoveWhenFarAway(false);
       zombie.setCanPickupItems(false);
