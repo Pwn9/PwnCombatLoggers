@@ -23,7 +23,7 @@ Death:
 PvPLogger Zombie:
     Enabled: true
     Keep Player Health: true #Set true to make the zombie spawn with the player's health
-    Health: 50
+    Health: 20
+    Allow Regen: true        #Set true to allow zombie to regen health over what player had when they logged (up to Health defined above)
 Scoreboard Display:
     Safe Time: true
-    Health: true

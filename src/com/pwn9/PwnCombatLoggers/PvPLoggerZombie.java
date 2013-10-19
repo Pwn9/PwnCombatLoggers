@@ -21,7 +21,7 @@ public class PvPLoggerZombie
    public static Set<PvPLoggerZombie> zombies = new HashSet<PvPLoggerZombie>();
    public static Set<String> waitingToDie = new HashSet<String>();
    public static Set<Integer> zombieIds = new HashSet<Integer>();
-   public static int HEALTH = 50;
+   public static int HEALTH = 20;
    private double hp = 10;
    private Zombie zombie;
    private String player;
@@ -32,7 +32,7 @@ public class PvPLoggerZombie
       this.player = player;
       Player p = Bukkit.getPlayer(player);
       hp = p.getHealth();
-      zombieIds.add((zombie = (Zombie)p.getWorld().spawnEntity(p.getLocation(), EntityType.ZOMBIE)).getEntityId());
+      zombieIds.add((zombie = (Zombie)p.getWorld().spawnEntity(p.getLocation(), EntityType.PIG_ZOMBIE)).getEntityId());
       zombie.getWorld().playEffect(zombie.getLocation(), Effect.MOBSPAWNER_FLAMES, 1, 1);
       zombie.setRemoveWhenFarAway(false);
       invFromPlayer(p); // Take player's inventory and apply it to this zombie.
@@ -73,10 +73,21 @@ public class PvPLoggerZombie
    public void invFromPlayer(Player p) 
    {
 	  PlayerInventory pi = p.getInventory(); 	   
-      //zombie.setMaxHealth(getHealth());   not sure what they were doing here...  
-	  // (args.length > 0) ? 1 : 2;  - or set to 20..  this probably works better
-      zombie.setMaxHealth((getHealth() == 0) ? 1 : getHealth());
+
+	  // Set max health of zombie - should it be constant from config or max of what player logger had at the time of logout?
+      if (PwnCombatLoggers.allowPlayerRegenZomb) 
+      {
+    	  zombie.setMaxHealth(PvPLoggerZombie.HEALTH);
+      }
+      else 
+      {
+    	  zombie.setMaxHealth((getHealth() == 0) ? 1 : getHealth());
+      }
+      
+      // Set the actual health of zombie
       zombie.setHealth(getHealth());
+      
+      // Additional zombie settings
       zombie.setRemoveWhenFarAway(false);
       zombie.setCanPickupItems(false);
       zombie.getEquipment().setArmorContents(pi.getArmorContents());
@@ -89,6 +100,7 @@ public class PvPLoggerZombie
       pi.setArmorContents(new ItemStack[] { null, null, null, null });
       pi.setItemInHand(null);
       this.contents = pi.getContents();
+      
       // We've saved the player's inventory, now let's wipe it from the player, so no dupes. -Sage905
       p.getInventory().clear();
       p.updateInventory();    
@@ -235,7 +247,7 @@ public class PvPLoggerZombie
    public double getHealth() 
    {
       if(! PwnCombatLoggers.keepPlayerHealthZomb)
-         return HEALTH;
+         return PvPLoggerZombie.HEALTH;
       else
       {
          return hp;
