@@ -41,7 +41,7 @@ public class PlayerListener implements Listener
    {
 	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
 	  
-      if(! pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.preventTeleport) 
+      if(! pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.disableTeleport) 
       {
          e.setCancelled(true);
          e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
@@ -114,7 +114,7 @@ public class PlayerListener implements Listener
    {
 	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return; 
 	  
-      if(pwncombatloggers.configuration.isBannedCommand(e.getMessage()) && ! pwncombatloggers.isSafe(e.getPlayer().getName()))
+      if(pwncombatloggers.configuration.isDisabledCommand(e.getMessage()) && ! pwncombatloggers.isSafe(e.getPlayer().getName()))
          e.setCancelled(true);
    }
 

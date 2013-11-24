@@ -24,7 +24,7 @@ public class CombatListener implements Listener
 
       if(! pwncombatloggers.configuration.isPVPWorld(e)) return;
       
-      if(! pwncombatloggers.taggingEnabled) return;
+      if(! pwncombatloggers.pluginEnabled) return;
       
       if(e.getDamager() instanceof Snowball) e.setCancelled(true);
       

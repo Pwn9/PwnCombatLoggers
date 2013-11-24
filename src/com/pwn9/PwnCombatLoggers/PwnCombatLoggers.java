@@ -39,13 +39,23 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    public static ChatColor nameTagColor;
    public long SAFE_DELAY = 30000;
    public long DEATH_TP_DELAY = 30000;
+   
+   // Plugin enabled?
+   public boolean pluginEnabled = true;   
+
+   // Disable teleport in combat?
+   public boolean disableTeleport = true;
+
+   // Remove invis in combat? Setting false by default because it breaks inherent game mechanic
+   public boolean removeInvis = false;   
+   
    public boolean useDeathTP = true;
    public boolean disableFlight = true;
    public boolean antiPilejump = false;
-   public boolean unInvis = true;
-   public boolean preventTeleport = true;
+
+
    public boolean pvpZombEnabled = true;
-   public boolean taggingEnabled = true;
+   
    public boolean disableEnderpearls = true;
    public boolean safeTimeObjective = true;
    static boolean keepPlayerHealthZomb = true;
@@ -82,13 +92,24 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    {
       configuration.enable();
       
+      // Plugin enabled?
+      this.pluginEnabled = configuration.getConfig().getBoolean("pluginEnabled", true);
+      
+      // Teleporting disabled?
+      this.disableTeleport = configuration.getConfig().getBoolean("disableTeleport", true);
+      
+      // Remove invisibility?
+      this.removeInvis = configuration.getConfig().getBoolean("removeInvisible", true);
+      
+      
+      
       this.SAFE_DELAY = configuration.getConfig().getInt("Tagging.Safe Time", 30) * 1000;
       this.disableFlight = configuration.getConfig().getBoolean("Tagging.Disable Flying", true);
-      this.unInvis = configuration.getConfig().getBoolean("Tagging.Remove Invisible", true);
-      this.taggingEnabled = configuration.getConfig().getBoolean("Tagging.Enabled", true);
+
+      
       this.antiPilejump = configuration.getConfig().getBoolean("Tagging.Anti Pilejump", true);
       this.disableEnderpearls = configuration.getConfig().getBoolean("Tagging.Disable Enderpearls", true);
-      this.preventTeleport = configuration.getConfig().getBoolean("Tagging.Prevent Teleport", true);
+
       
       this.DEATH_TP_DELAY = configuration.getConfig().getInt("Death.DeathTP Time", 30) * 1000;
       useDeathTP = configuration.getConfig().getBoolean("Death.DeathTP Enabled", true);
@@ -223,8 +244,6 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       removeFlight(p);
       refresh(p);
       unInvis(p);
-      configuration.performConsoleUnsafeCommands(p);
-      configuration.performUnsafeCommands(p);
    }
 
    private void addToBoard(Player p) 
@@ -245,7 +264,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    private void unInvis(Player p) 
    {
-      if(unInvis) p.removePotionEffect(PotionEffectType.INVISIBILITY);
+      if(removeInvis) p.removePotionEffect(PotionEffectType.INVISIBILITY);
    }
 
    private void removeFlight(Player p) 
@@ -267,8 +286,6 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          safeTimes.remove(player.getName());
          refresh(player);
          player.sendMessage("§cYou are now safe.");
-         configuration.performConsoleSafeCommands(player);
-         configuration.performSafeCommands(player);
       }
    }
 
