@@ -1,6 +1,9 @@
 package com.pwn9.PwnCombatLoggers.Listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,7 +12,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerZombie;
+import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
 import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
 
 public class ConnectListener implements Listener 
@@ -25,18 +28,29 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onJoin(PlayerJoinEvent e) 
    {
-	   if(PvPLoggerZombie.waitingToDie.contains(e.getPlayer().getName())) 
+	   if(PvPLoggerMob.waitingToDie.contains(e.getPlayer().getName())) 
 	   {
 		   e.getPlayer().setHealth(0);
-		   PvPLoggerZombie.waitingToDie.remove(e.getPlayer().getName());
+		   
+		   PvPLoggerMob.waitingToDie.remove(e.getPlayer().getName());
 	   } 	   
 	   
-      PvPLoggerZombie pz = PvPLoggerZombie.getByOwner(e.getPlayer().getName());
+      PvPLoggerMob pz = PvPLoggerMob.getByOwner(e.getPlayer().getName());
+      
       if(pz != null) 
       {
-         pwncombatloggers.addUnsafe(e.getPlayer());
-         e.getPlayer().teleport(pz.getZombie().getLocation());
+         Location pzloc = pz.getZombie().getLocation();
+         
+         PwnCombatLoggers.log(Level.INFO, "Tagged player " + e.getPlayer().getName() + " logging in at " + pzloc.toString());
+         
+         // Teleport player on reconnect before adding back to unsafe list, otherwise the TP will be cancelled when TP disabled
+         e.getPlayer().teleport(pzloc);
+                 
          pz.despawnNoDrop(true, true);
+         
+    	 // this method is breaking
+         pwncombatloggers.addUnsafe(e.getPlayer());
+         
          e.getPlayer().setHealth(pz.getHealthForOwner());
       }
    }
@@ -55,10 +69,10 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onQuit(PlayerQuitEvent e) 
    {
-      if(! pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.pvpZombEnabled) 
+      if(! pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.mobEnabled) 
       {
          lastLogout = System.currentTimeMillis();
-         new PvPLoggerZombie(e.getPlayer().getName());
+         new PvPLoggerMob(e.getPlayer().getName());
       }
    }
 
@@ -71,9 +85,9 @@ public class ConnectListener implements Listener
          if(en.getType() == EntityType.ZOMBIE) 
          {
             Zombie z = (Zombie)en;
-            if(PvPLoggerZombie.isPvPZombie(z)) 
+            if(PvPLoggerMob.isPvPZombie(z)) 
             {
-               PvPLoggerZombie pz = PvPLoggerZombie.getByZombie(z);
+               PvPLoggerMob pz = PvPLoggerMob.getByZombie(z);
                pz.despawnDrop(true);
                pz.killOwner();
             }

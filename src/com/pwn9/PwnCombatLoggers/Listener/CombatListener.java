@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerZombie;
+import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
 import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
 
 public class CombatListener implements Listener 
@@ -22,9 +22,9 @@ public class CombatListener implements Listener
    public void onHit(EntityDamageByEntityEvent e) 
    {
 
-      if(! pwncombatloggers.configuration.isPVPWorld(e)) return;
+      if(!pwncombatloggers.configuration.isPVPWorld(e)) return;
       
-      if(! pwncombatloggers.pluginEnabled) return;
+      if(!pwncombatloggers.pluginEnabled) return;
       
       if(e.getDamager() instanceof Snowball) e.setCancelled(true);
       
@@ -52,7 +52,7 @@ public class CombatListener implements Listener
          } 
          else if(e.getDamager() instanceof Zombie) 
          {
-            if(PvPLoggerZombie.isPvPZombie((Zombie)e.getDamager())) 
+            if(PvPLoggerMob.isPvPZombie((Zombie)e.getDamager())) 
             {
                if(pwncombatloggers.isSafe(hitted.getName())) e.setCancelled(true);
             }
@@ -63,7 +63,7 @@ public class CombatListener implements Listener
             return;
          }
          
-         if(! e.isCancelled()) 
+         if(!e.isCancelled()) 
          {
             
             if(pwncombatloggers.isSafe(hitted.getName())) 
@@ -85,12 +85,12 @@ public class CombatListener implements Listener
          } 
          else 
          {
-            if(! pwncombatloggers.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
+            if(!pwncombatloggers.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
             {
                pwncombatloggers.resetSafeTime(hitted);
                if(pwncombatloggers.isSafe(hitter.getName())) 
                {
-                  if(! pwncombatloggers.antiPilejump) 
+                  if(!pwncombatloggers.antiPilejump) 
                   {
                      e.setCancelled(false);
                      pwncombatloggers.addUnsafe(hitter);

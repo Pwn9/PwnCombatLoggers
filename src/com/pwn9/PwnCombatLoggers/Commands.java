@@ -11,16 +11,18 @@ import java.util.regex.Pattern;
 
 public class Commands 
 {
+	
    private static PwnCombatLoggers pwnCombatLoggers;
 
    public Commands(PwnCombatLoggers pwnCombatLoggers)
    {
-      Commands.pwnCombatLoggers = pwnCombatLoggers;
+	   Commands.pwnCombatLoggers = pwnCombatLoggers;
    }
 
    public void onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
    {
-	  switch (cmd.getName().toLowerCase()) {
+	  switch (cmd.getName().toLowerCase()) 
+	  {
 	  	case "callhit":
 	  		callhit(sender, cmd, commandLabel, args);
 	  		break;	  
@@ -126,7 +128,7 @@ public class Commands
                     if(matcher.matches()) 
                     {
 	                   pwnCombatLoggers.setNameTagColor(ChatColor.getByChar(args[1]));
-	                   pwnCombatLoggers.configuration.getConfig().set("Tagging.NameTag Color", pwnCombatLoggers.getNameTagColor().getChar());
+	                   pwnCombatLoggers.configuration.getConfig().set("tagColor", pwnCombatLoggers.getNameTagColor().getChar());
 	                   sender.sendMessage("§cColor changed to: " + pwnCombatLoggers.getNameTagColor() + "THIS.");
 	                   pwnCombatLoggers.saveConfig();
                     }
@@ -149,7 +151,7 @@ public class Commands
                     if(matcher.matches()) 
                     {
                     	int newtime = Integer.parseInt(args[1]);
-	                    pwnCombatLoggers.configuration.getConfig().set("Tagging.Safe Time", newtime);
+	                    pwnCombatLoggers.configuration.getConfig().set("tagTime", newtime);
 	                    sender.sendMessage("§cSafe Time changed to: " + args[1] +" seconds.");
 	                    pwnCombatLoggers.saveConfig();
 	                    pwnCombatLoggers.reloadConfig();

@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.*;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerZombie;
+import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
 import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
 
 public class PlayerListener implements Listener 
@@ -25,7 +25,7 @@ public class PlayerListener implements Listener
    @EventHandler
    public void onDeath(PlayerRespawnEvent e)
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
 	  
       pwncombatloggers.safeTimes.remove(e.getPlayer().getName());
       pwncombatloggers.clearFromBoard(e.getPlayer());
@@ -39,9 +39,9 @@ public class PlayerListener implements Listener
    @EventHandler
    public void onTpEvent(PlayerTeleportEvent e) 
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
 	  
-      if(! pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.disableTeleport) 
+      if(!pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.disableTeleport) 
       {
          e.setCancelled(true);
          e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
@@ -64,14 +64,14 @@ public class PlayerListener implements Listener
    @EventHandler
    public void entityDeath(EntityDeathEvent e) 
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
 	   
       if(e.getEntity() instanceof Zombie) 
       {
-         PvPLoggerZombie pz = PvPLoggerZombie.getByZombie((Zombie)e.getEntity());
+         PvPLoggerMob pz = PvPLoggerMob.getByZombie((Zombie)e.getEntity());
          if(pz != null) 
          {
-            PvPLoggerZombie.waitingToDie.add(pz.getPlayer());
+            PvPLoggerMob.waitingToDie.add(pz.getPlayer());
             pz.despawnDrop(true);
          }
       }
@@ -80,9 +80,9 @@ public class PlayerListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onFlight(PlayerToggleFlightEvent e) 
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
 	   
-      if(pwncombatloggers.disableFlight && ! pwncombatloggers.isSafe(e.getPlayer().getName())) 
+      if(pwncombatloggers.disableFlight && !pwncombatloggers.isSafe(e.getPlayer().getName())) 
       {
          e.getPlayer().setFlying(false);
          e.getPlayer().setAllowFlight(false);
@@ -93,7 +93,7 @@ public class PlayerListener implements Listener
    @EventHandler
    public void onProject(ProjectileLaunchEvent e) 
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
 	  
       if(pwncombatloggers.disableEnderpearls) 
       {
@@ -103,7 +103,7 @@ public class PlayerListener implements Listener
             if(pearl.getShooter() instanceof Player) 
             {
                Player p = (Player)pearl.getShooter();
-               if(! pwncombatloggers.isSafe(p.getName())) e.setCancelled(true);
+               if(!pwncombatloggers.isSafe(p.getName())) e.setCancelled(true);
             }
          }
       }
@@ -112,10 +112,13 @@ public class PlayerListener implements Listener
    @EventHandler
    public void command(PlayerCommandPreprocessEvent e) 
    {
-	  if(! pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return; 
+	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return; 
 	  
-      if(pwncombatloggers.configuration.isDisabledCommand(e.getMessage()) && ! pwncombatloggers.isSafe(e.getPlayer().getName()))
+      if(pwncombatloggers.configuration.isDisabledCommand(e.getMessage()) && !pwncombatloggers.isSafe(e.getPlayer().getName())) 
+      {
+    	 e.getPlayer().sendMessage("§cYou cannot use that command whilst in combat!");
          e.setCancelled(true);
+      }
    }
 
 }

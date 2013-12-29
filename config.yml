@@ -1,4 +1,3 @@
-# Set to false to disable entire plugin
 pluginEnabled: true
 
 # Worlds to disable this plugin in, good for Creative, Battle Arenas and worlds where scoreboard conflicts
@@ -6,7 +5,7 @@ disabledWorlds:
     - example1
     - creative
 
-# Disabled commandswhen player is tagged in combat
+# Disabled commands when player is tagged in combat
 disabledCommands: 
     - home
     - spawn
@@ -20,22 +19,41 @@ disableTeleport: true
 # Set true to remove invisibility from players who are tagged in combat
 removeInvisible: false 
 
+# Color of the nametag of players in combat
+tagColor: 'c'
 
-Tagging:
-    NameTag Color: 'c'        #Color that the nametag of unsafe people will be
+# Disables enderpearls for  players in combat
+disableEnderpearls: true 
 
-    Disable Enderpearls: true #Disables enderpearls for people who are unsafe
-    Anti Pilejump: true       #Only the people who were PVPing in the unsafe zone can continue to pvp
-    Disable Flying: true      #Stops flight for those who aren't safe
-    Safe Time: 20
-    Use TagAPI: true          #Set to false to use scoreboard instead
-Death:
-    DeathTP Enabled: false
-    DeathTP Time: 20         #Amount of seconds before players can teleport after death
-PvPLogger Zombie:
-    Enabled: true
-    Keep Player Health: true #Set true to make the zombie spawn with the player's health
-    Health: 20
-    Allow Regen: true        #Set true to allow zombie to regen health over what player had when they logged (up to Health defined above)
-Scoreboard Display:
-    Safe Time: true
+# Block players who are not tagged to attack tagged players in safe zones
+antiPilejump: false
+
+# Block flying from players who are tagged in combat
+disableFlying: true     
+
+# How long in seconds, will a tag last
+tagTime: 20
+
+# Use the scoreboard to display time left til the tag wears off
+displayTagTime: true
+
+# Use TagAPI, if set false plugin will fallback to scoreboard
+enableTagAPI: true
+
+# Enable death TP timer
+deathTPEnabled: true
+
+# Time in seconds, a player is not allowed to teleport after dying
+deathTPTime: 20  
+       
+# Enable replacing players who log out of combat with a mob
+mobEnabled: true
+
+# mob will spawn with the player's health
+keepPlayerHealth: true
+ 
+# max health available (20 is a normal players default) 
+maxHealth: 20
+
+# Set true to allow the mob to regen health over what player had when they logged (up to Health defined above)    
+allowRegen: true  

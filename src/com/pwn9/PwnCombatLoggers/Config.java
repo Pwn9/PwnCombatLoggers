@@ -8,18 +8,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class Config 
 {
 
    private static PwnCombatLoggers pwncombatloggers;
-   
-   // Setup disabled worlds list
-   private List<String> disabledWorlds;
-   
-   // Setup commands to disable when tagged
-   private List<String> disabledCommands;
    
    public Config(PwnCombatLoggers pwncombatloggers) 
    {
@@ -34,7 +27,7 @@ public class Config
    public void enable() 
    {
 	   
-      if(! pwncombatloggers.getDataFolder().exists()) 
+      if(!pwncombatloggers.getDataFolder().exists()) 
       {
          pwncombatloggers.getConfig();
          pwncombatloggers.saveDefaultConfig();
@@ -53,8 +46,7 @@ public class Config
       tryUpdate();
       disabledWorlds();
       disabledCommands();
-
-      
+   
    }
 
    private void addDefaultConfig() throws IOException 
@@ -72,13 +64,13 @@ public class Config
    // get the disabled commands list
    private void disabledCommands() 
    {
-	   disabledCommands = getConfig().getStringList("disabledCommands");
+	   pwncombatloggers.disabledCommands = getConfig().getStringList("disabledCommands");
    }
    
    // get the disabled worlds list
    private void disabledWorlds() 
    {
-	  disabledWorlds = getConfig().getStringList("disabledWorlds"); 
+	   pwncombatloggers.disabledWorlds = getConfig().getStringList("disabledWorlds"); 
    }
 
    private void tryUpdate() 
@@ -98,36 +90,30 @@ public class Config
 
    public ChatColor parseNameTagColor()
    {
-      return ChatColor.getByChar(getConfig().getString("Tagging.NameTag Color"));
+      return ChatColor.getByChar(getConfig().getString("tagColor"));
    }
 
    public boolean isPVPWorld(EntityDamageByEntityEvent e) 
    {
-      return ! disabledWorlds.contains(e.getEntity().getWorld().getName());
+      return !pwncombatloggers.disabledWorlds.contains(e.getEntity().getWorld().getName());
    }
 
    public boolean isPVPWorld(World w)
    {
-      return ! disabledWorlds.contains(w.getName());
+      return !pwncombatloggers.disabledWorlds.contains(w.getName());
    }
    
    public boolean isPVPWorld(Player p)
    {
-	  return ! disabledWorlds.contains(p.getWorld().getName());
+	  return !pwncombatloggers.disabledWorlds.contains(p.getWorld().getName());
    }
 
    public boolean isDisabledCommand(String command) 
    {
-	  // remove leading "/" in the command
-	  command = command.substring(1);
-	  
-	  // is command in the disabledCommands list?
-	  return ! disabledCommands.contains(command);
-	   
-      /*for(String s : bannedCommands)
+      for(String s : pwncombatloggers.disabledCommands)
       {
          if(command.startsWith("/" + s)) return true;
       }
-      return false;*/
+      return false;   
    }
 }

@@ -20,6 +20,7 @@ import com.pwn9.PwnCombatLoggers.Listener.PlayerListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    public HashMap<String, Long> deathTimes = new HashMap<String, Long>();
    private Set<String> couldFly = new HashSet<String>();
    private Set<String> hadFlight = new HashSet<String>();
-   private static Logger logger;
+   public static Logger logger;
    private TagAPEye tagApi;
    ScoreboardFeatures scoreboard;
    private static PwnCombatLoggers instance;
@@ -50,17 +51,35 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    public boolean removeInvis = false;   
    
    public boolean useDeathTP = true;
+   
+   
    public boolean disableFlight = true;
+   
+   
    public boolean antiPilejump = false;
-
-
-   public boolean pvpZombEnabled = true;
+   
+   
+   public boolean mobEnabled = true; 
+   
+   public static String mobType;
    
    public boolean disableEnderpearls = true;
+   
+   
    public boolean safeTimeObjective = true;
+   
+   
    static boolean keepPlayerHealthZomb = true;
+   
+   
    static boolean allowPlayerRegenZomb = true;
 
+   // Setup disabled worlds list
+   public List<String> disabledWorlds;
+   
+   // Setup commands to disable when tagged
+   public List<String> disabledCommands;
+      
    public void onEnable() 
    {
       instance = this;
@@ -77,7 +96,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    private void manageInstances() 
    {
-      if(configuration.getConfig().getBoolean("Tagging.Use TagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
+      if(configuration.getConfig().getBoolean("enableTagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
       {
          this.tagApi = new TagEnabled(this);
       } 
@@ -101,26 +120,33 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       // Remove invisibility?
       this.removeInvis = configuration.getConfig().getBoolean("removeInvisible", true);
       
+      this.SAFE_DELAY = configuration.getConfig().getInt("tagTime", 30) * 1000;
       
+      this.safeTimeObjective = configuration.getConfig().getBoolean("displayTagTime", true);
       
-      this.SAFE_DELAY = configuration.getConfig().getInt("Tagging.Safe Time", 30) * 1000;
-      this.disableFlight = configuration.getConfig().getBoolean("Tagging.Disable Flying", true);
+      this.disableFlight = configuration.getConfig().getBoolean("disableFlying", true);
 
+      this.antiPilejump = configuration.getConfig().getBoolean("antiPilejump", true);
       
-      this.antiPilejump = configuration.getConfig().getBoolean("Tagging.Anti Pilejump", true);
-      this.disableEnderpearls = configuration.getConfig().getBoolean("Tagging.Disable Enderpearls", true);
+      this.disableEnderpearls = configuration.getConfig().getBoolean("disableEnderpearls", true);
 
+      this.DEATH_TP_DELAY = configuration.getConfig().getInt("deathTPTime", 30) * 1000;
       
-      this.DEATH_TP_DELAY = configuration.getConfig().getInt("Death.DeathTP Time", 30) * 1000;
-      useDeathTP = configuration.getConfig().getBoolean("Death.DeathTP Enabled", true);
+      useDeathTP = configuration.getConfig().getBoolean("deathTPEnabled", true);
       
-      this.pvpZombEnabled = configuration.getConfig().getBoolean("PvPLogger Zombie.Enabled", true);
-      PvPLoggerZombie.HEALTH = configuration.getConfig().getInt("PvPLogger Zombie.Health", 20);
-      PwnCombatLoggers.keepPlayerHealthZomb = configuration.getConfig().getBoolean("PvPLogger Zombie.Keep Player Health", true);
-      PwnCombatLoggers.allowPlayerRegenZomb = configuration.getConfig().getBoolean("PvPLogger Zombie.Allow Regen", true);
+      this.mobEnabled = configuration.getConfig().getBoolean("mobEnabled", true);
+      
+      PwnCombatLoggers.mobType = configuration.getConfig().getString("mobType", "ZOMBIE");
+      
+      PvPLoggerMob.HEALTH = configuration.getConfig().getInt("maxHealth", 20);
+      
+      PwnCombatLoggers.keepPlayerHealthZomb = configuration.getConfig().getBoolean("keepPlayerHealth", true);
+      
+      PwnCombatLoggers.allowPlayerRegenZomb = configuration.getConfig().getBoolean("allowRegen", true);
       
       PwnCombatLoggers.nameTagColor = configuration.parseNameTagColor();
-      this.safeTimeObjective = configuration.getConfig().getBoolean("Scoreboard Display.Safe Time", true);
+      
+      
    }
 
    private void resetNameTagsAuto() 
@@ -219,7 +245,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    private void dealWithZombies() 
    {
-      for(PvPLoggerZombie pz: PvPLoggerZombie.zombies)
+      for(PvPLoggerMob pz: PvPLoggerMob.zombies)
       {
          pz.despawn();
       }
@@ -238,11 +264,17 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    public void addUnsafe(Player p) 
    {
+	  // this is breaking
       addToBoard(p);
+      
       resetSafeTime(p);
+      
       p.sendMessage("§cYou can now be hit anywhere for at least " + (SAFE_DELAY / 1000) + " seconds!");
+           
       removeFlight(p);
+      
       refresh(p);
+      
       unInvis(p);
    }
 
@@ -251,7 +283,9 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       if(safeTimeObjective) 
       {
          p.setScoreboard(scoreboard.getBoard());
-         if (!configuration.getConfig().getBoolean("Tagging.Use TagAPI")){
+         
+         if (!configuration.getConfig().getBoolean("Tagging.Use TagAPI"))
+         {
         	 scoreboard.team.addPlayer(p);
          }
       }

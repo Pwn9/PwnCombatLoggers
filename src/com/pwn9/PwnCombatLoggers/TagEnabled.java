@@ -21,7 +21,7 @@ public class TagEnabled implements TagAPEye, Listener
    @EventHandler
    public void onNameTag(org.kitteh.tag.PlayerReceiveNameTagEvent e)
    {
-      if(! pwncombatloggers.isSafe(e.getNamedPlayer().getName()))
+      if(!pwncombatloggers.isSafe(e.getNamedPlayer().getName()))
       {
          Player p = e.getNamedPlayer();
          e.setTag(PwnCombatLoggers.nameTagColor + p.getName());
