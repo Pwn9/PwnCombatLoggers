@@ -59,15 +59,11 @@ public class Config
       pwncombatloggers.getConfig().save(file);
    }
 
- // THIS STUFF COULD GET LUMPED INTO 1 QUICK LOAD CONFIG GUY ITS REALLY KLUDGY LIKE THIS.
-   
-   // get the disabled commands list
    private void disabledCommands() 
    {
 	   pwncombatloggers.disabledCommands = getConfig().getStringList("disabledCommands");
    }
    
-   // get the disabled worlds list
    private void disabledWorlds() 
    {
 	   pwncombatloggers.disabledWorlds = getConfig().getStringList("disabledWorlds"); 

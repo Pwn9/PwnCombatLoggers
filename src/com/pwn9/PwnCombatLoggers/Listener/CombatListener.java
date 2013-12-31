@@ -6,8 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
-import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
+import com.pwn9.PwnCombatLoggers.*;
 
 public class CombatListener implements Listener 
 {
@@ -22,11 +21,19 @@ public class CombatListener implements Listener
    public void onHit(EntityDamageByEntityEvent e) 
    {
 
-      if(!pwncombatloggers.configuration.isPVPWorld(e)) return;
+      if(!pwncombatloggers.configuration.isPVPWorld(e)) 
+      {
+    	  return;
+      }
       
-      if(!pwncombatloggers.pluginEnabled) return;
+      if(!pwncombatloggers.pluginEnabled) {
+    	  return;
+      }
       
-      if(e.getDamager() instanceof Snowball) e.setCancelled(true);
+      if(e.getDamager() instanceof Snowball) 
+      {
+    	  e.setCancelled(true);
+      }
       
       if(e.getEntity() instanceof Player) 
       {
@@ -54,7 +61,9 @@ public class CombatListener implements Listener
          {
             if(PvPLoggerMob.isPvPZombie((Zombie)e.getDamager())) 
             {
-               if(pwncombatloggers.isSafe(hitted.getName())) e.setCancelled(true);
+               if(pwncombatloggers.isSafe(hitted.getName())) {
+            	   e.setCancelled(true);
+               }
             }
             return;
          } 
@@ -63,9 +72,16 @@ public class CombatListener implements Listener
             return;
          }
          
-         if(!e.isCancelled()) 
+         // Check here for reasons why not to allow attack
+         if (!pwncombatloggers.isAttackAllowed(hitter, hitted)) 
          {
-            
+      	   //PwnCombatLoggers.log(Level.INFO, "Player: " + hitter + " is not allowed to hit " + hitted);
+      	   e.setCancelled(true);
+         }       
+         else if(!e.isCancelled() && pwncombatloggers.isAttackAllowed(hitter, hitted)) 
+         {  
+        	//PwnCombatLoggers.log(Level.INFO, "(normal) Player: " + hitter + " has hit " + hitted);
+        	
             if(pwncombatloggers.isSafe(hitted.getName())) 
             {
                pwncombatloggers.addUnsafe(hitted);
@@ -74,6 +90,7 @@ public class CombatListener implements Listener
             {
                pwncombatloggers.resetSafeTime(hitted);
             }
+            
             if(pwncombatloggers.isSafe(hitter.getName())) 
             {
                pwncombatloggers.addUnsafe(hitter);
@@ -81,13 +98,16 @@ public class CombatListener implements Listener
             else 
             {
                pwncombatloggers.resetSafeTime(hitter);
-            }
+            }	  
          } 
          else 
          {
+        	//PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
+        	
             if(!pwncombatloggers.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
             {
                pwncombatloggers.resetSafeTime(hitted);
+               
                if(pwncombatloggers.isSafe(hitter.getName())) 
                {
                   if(!pwncombatloggers.antiPilejump) 
@@ -103,6 +123,7 @@ public class CombatListener implements Listener
                }
             }
          }
+         
       }
    }
 }

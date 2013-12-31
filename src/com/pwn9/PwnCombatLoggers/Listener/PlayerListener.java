@@ -9,8 +9,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.*;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
-import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
+import com.pwn9.PwnCombatLoggers.*;
 
 public class PlayerListener implements Listener 
 {

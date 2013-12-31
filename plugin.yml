@@ -1,7 +1,7 @@
 name: PwnCombatLoggers
-version: 0.9
+version: 0.9.1
 author: tremor77
-description: Pwn9 implementation of the PvPTag Plugin
+description: Prevent players from logging out of PvP or escaping to safe zones
 website: http://pwn9.com
 main: com.pwn9.PwnCombatLoggers.PwnCombatLoggers
 softdepend: [TagAPI]

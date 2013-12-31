@@ -11,9 +11,8 @@ import java.util.regex.Pattern;
 
 public class Commands 
 {
-	
    private static PwnCombatLoggers pwnCombatLoggers;
-
+   
    public Commands(PwnCombatLoggers pwnCombatLoggers)
    {
 	   Commands.pwnCombatLoggers = pwnCombatLoggers;

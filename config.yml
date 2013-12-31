@@ -13,17 +13,17 @@ disabledCommands:
     - warp
     - tpa
 
-# Disable teleporting when player is tagged in combat
-disableTeleport: true
+# Disable teleporting when player is tagged in combat, this conflicts with plugins like worldborder, better to use disabledCommands
+disableTeleport: false
 
-# Set true to remove invisibility from players who are tagged in combat
+# Set true to remove invisibility from players who are tagged in combat, default to false because it breaks default game mechanic
 removeInvisible: false 
 
 # Color of the nametag of players in combat
 tagColor: 'c'
 
-# Disables enderpearls for  players in combat
-disableEnderpearls: true 
+# Disables enderpearls for  players in combat, default to false because it breaks default game mechanic
+disableEnderpearls: false
 
 # Block players who are not tagged to attack tagged players in safe zones
 antiPilejump: false

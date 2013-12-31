@@ -18,6 +18,7 @@ import java.util.logging.Level;
 
 public class PvPLoggerMob 
 {
+	
    public static Set<PvPLoggerMob> zombies = new HashSet<PvPLoggerMob>();
    public static Set<String> waitingToDie = new HashSet<String>();
    public static Set<Integer> zombieIds = new HashSet<Integer>();
@@ -208,8 +209,10 @@ public class PvPLoggerMob
      zombie.getWorld().playEffect(zombie.getLocation(), Effect.ENDER_SIGNAL, 1, 1);
      zombie.setHealth(0);
      zombie.remove();
-     if(iterate)
+     if(iterate) 
+     {
         despawn();
+     }
    }
 
    public static PvPLoggerMob getByOwner(String owner) 
@@ -262,4 +265,5 @@ public class PvPLoggerMob
       else
          return zombie.getHealth();
    }
+   
 }

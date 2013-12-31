@@ -12,8 +12,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
-import com.pwn9.PwnCombatLoggers.PvPLoggerMob;
-import com.pwn9.PwnCombatLoggers.PwnCombatLoggers;
+import com.pwn9.PwnCombatLoggers.*;
 
 public class ConnectListener implements Listener 
 {
