@@ -21,15 +21,10 @@ public class CombatListener implements Listener
    public void onHit(EntityDamageByEntityEvent e) 
    {
 
-      if(!pwncombatloggers.configuration.isPVPWorld(e)) 
-      {
-    	  return;
-      }
+      if(!pwncombatloggers.configuration.isPVPWorld(e)) return;
       
-      if(!pwncombatloggers.pluginEnabled) {
-    	  return;
-      }
-      
+      if(!pwncombatloggers.pluginEnabled) return;
+
       if(e.getDamager() instanceof Snowball) 
       {
     	  e.setCancelled(true);
