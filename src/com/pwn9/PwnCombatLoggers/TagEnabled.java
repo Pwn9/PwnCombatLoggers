@@ -19,7 +19,7 @@ public class TagEnabled implements TagAPEye, Listener
    }
 
    @EventHandler
-   public void onNameTag(org.kitteh.tag.PlayerReceiveNameTagEvent e)
+   public void onNameTag(org.kitteh.tag.AsyncPlayerReceiveNameTagEvent e)
    {
       if(!pwncombatloggers.isSafe(e.getNamedPlayer().getName()))
       {
