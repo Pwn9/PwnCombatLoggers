@@ -37,6 +37,9 @@ import com.pwn9.PwnCombatLoggers.Listener.*;
 
 public class PwnCombatLoggers extends JavaPlugin implements Listener 
 {
+	// Init plugin as instance
+	public static PwnCombatLoggers instance;
+	
 	public static File dataFolder;
 	public static Boolean logEnabled;	
 	private final Commands Commands = new Commands(this);
@@ -46,7 +49,6 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	private Set<String> hadFlight = new HashSet<String>();
 	public static Logger logger;
 	ScoreboardFeatures scoreboard;
-	private static PwnCombatLoggers instance;
 	public Config configuration;
 	public static ChatColor nameTagColor;
 	public long SAFE_DELAY = 20000;
@@ -65,46 +67,49 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	static boolean allowPlayerRegenZomb = true;
 	public List<String> disabledWorlds;
 	public List<String> disabledCommands;
+	
 	// SimpleClans hook
 	private SimpleClans sc;
+	
 	// TagAPI hook
 	private TagAPEye tagApi;
    
-   public void onEnable() 
-   {
-	  instance = this;
-      configuration = new Config(this);
-      logger = getLogger();
-      manageConfig();
-      manageInstances();
-      scoreboard = new ScoreboardFeatures(safeTimeObjective);
-      getServer().getPluginManager().registerEvents(new CombatListener(this), this);
-      getServer().getPluginManager().registerEvents(new ConnectListener(this), this);
-      getServer().getPluginManager().registerEvents(new PlayerListener(this), this);      
-      task(); 
-   }
+	public void onEnable() 
+	{
+	   //create instance of this
+	   instance = this;
+	   configuration = new Config(this);
+	   logger = getLogger();
+	   manageConfig();
+	   manageInstances();
+	   scoreboard = new ScoreboardFeatures(safeTimeObjective);
+	   getServer().getPluginManager().registerEvents(new CombatListener(this), this);
+	   getServer().getPluginManager().registerEvents(new ConnectListener(this), this);
+	   getServer().getPluginManager().registerEvents(new PlayerListener(this), this);      
+	   task(); 
+	}
 
-   private void manageInstances() 
-   {
+	private void manageInstances() 
+	{
 	  // Setup TagAPI
-      if(configuration.getConfig().getBoolean("enableTagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
-      {
-         this.tagApi = new TagEnabled(this);
-      } 
-      else 
-      {
-         this.tagApi = new TagDisabled();
-      }
-      getServer().getPluginManager().registerEvents(tagApi, this);
-      
-      // Check for SimpleClans
-      Plugin plug = getServer().getPluginManager().getPlugin("SimpleClans");
-      if (plug != null)
-      {
-          sc = ((SimpleClans) plug);
-          logger.log(Level.INFO, "SimpleClans Found, Enabling Hooks");
-      }      
-   }
+	  if(configuration.getConfig().getBoolean("enableTagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
+	  {
+	     this.tagApi = new TagEnabled(this);
+	  } 
+	  else 
+	  {
+	     this.tagApi = new TagDisabled();
+	  }
+	  getServer().getPluginManager().registerEvents(tagApi, this);
+	  
+	  // Check for SimpleClans
+	  Plugin plug = getServer().getPluginManager().getPlugin("SimpleClans");
+	  if (plug != null)
+	  {
+	      sc = ((SimpleClans) plug);
+	      logger.log(Level.INFO, "SimpleClans Found, Enabling Hooks");
+	  }      
+	}
 
    void manageConfig() 
    {

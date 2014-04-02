@@ -11,11 +11,11 @@ import java.util.regex.Pattern;
 
 public class Commands 
 {
-   private static PwnCombatLoggers pwnCombatLoggers;
+   private static PwnCombatLoggers plugin;
    
    public Commands(PwnCombatLoggers pwnCombatLoggers)
    {
-	   Commands.pwnCombatLoggers = pwnCombatLoggers;
+	   Commands.plugin = pwnCombatLoggers;
    }
 
    public void onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) 
@@ -42,18 +42,18 @@ public class Commands
           {
              if(! args[0].equalsIgnoreCase("all")) 
              {
-                Player p = pwnCombatLoggers.getServer().getPlayer(args[0]);
+                Player p = plugin.getServer().getPlayer(args[0]);
                 if(p == null) 
                 {
                    sender.sendMessage("§cYou must specify an online player.");
                 } 
                 else 
                 {
-                   if(! pwnCombatLoggers.isSafe(p.getName())) 
+                   if(! plugin.isSafe(p.getName())) 
                    {
-                      pwnCombatLoggers.callSafe(p);
+                      plugin.callSafe(p);
                       sender.sendMessage("§c" + p.getName() + " is no longer hittable.");
-                      pwnCombatLoggers.refresh(p);
+                      plugin.refresh(p);
                    } 
                    else 
                    {
@@ -63,7 +63,7 @@ public class Commands
              } 
              else
              {
-                pwnCombatLoggers.callSafeAllManual();
+                plugin.callSafeAllManual();
              }
           } 
           else
@@ -81,17 +81,17 @@ public class Commands
             
             if(args.length == 1) 
             {            
-               p = pwnCombatLoggers.getServer().getPlayer(args[0]);
+               p = plugin.getServer().getPlayer(args[0]);
                if(p == null)
                {
                   sender.sendMessage("§cYou must specify an online player.");
                }
                else 
                {
-                   if(pwnCombatLoggers.isSafe(p.getName())) 
+                   if(plugin.isSafe(p.getName())) 
                    {
                       p.damage(1);
-                      pwnCombatLoggers.addUnsafe(p);
+                      plugin.addUnsafe(p);
                    }
                }
                
@@ -110,12 +110,12 @@ public class Commands
           if(args.length > 0) {
              if(args[0].equalsIgnoreCase("reload")) 
              {
-                pwnCombatLoggers.configuration.reload();
+                plugin.configuration.reload();
                 sender.sendMessage("§cSettings reloaded!");
              } 
              else if(args[0].equalsIgnoreCase("save")) 
              {
-                pwnCombatLoggers.saveConfig();
+                plugin.saveConfig();
                 sender.sendMessage("§cConfig saved!");
              }             
              else if(args[0].equalsIgnoreCase("setcolor")) 
@@ -126,10 +126,10 @@ public class Commands
                     Matcher matcher = pattern.matcher(args[1]);
                     if(matcher.matches()) 
                     {
-	                   pwnCombatLoggers.setNameTagColor(ChatColor.getByChar(args[1]));
-	                   pwnCombatLoggers.configuration.getConfig().set("tagColor", pwnCombatLoggers.getNameTagColor().getChar());
-	                   sender.sendMessage("§cColor changed to: " + pwnCombatLoggers.getNameTagColor() + "THIS.");
-	                   pwnCombatLoggers.saveConfig();
+	                   plugin.setNameTagColor(ChatColor.getByChar(args[1]));
+	                   plugin.configuration.getConfig().set("tagColor", plugin.getNameTagColor().getChar());
+	                   sender.sendMessage("§cColor changed to: " + plugin.getNameTagColor() + "THIS.");
+	                   plugin.saveConfig();
                     }
                     else 
                     {
@@ -150,10 +150,10 @@ public class Commands
                     if(matcher.matches()) 
                     {
                     	int newtime = Integer.parseInt(args[1]);
-	                    pwnCombatLoggers.configuration.getConfig().set("tagTime", newtime);
+	                    plugin.configuration.getConfig().set("tagTime", newtime);
 	                    sender.sendMessage("§cSafe Time changed to: " + args[1] +" seconds.");
-	                    pwnCombatLoggers.saveConfig();
-	                    pwnCombatLoggers.reloadConfig();
+	                    plugin.saveConfig();
+	                    plugin.reloadConfig();
                     }
                     else 
                     {

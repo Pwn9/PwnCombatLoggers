@@ -12,26 +12,26 @@ import java.io.IOException;
 public class Config 
 {
 
-   private static PwnCombatLoggers pwncombatloggers;
+   private static PwnCombatLoggers plugin;
    
    public Config(PwnCombatLoggers pwncombatloggers) 
    {
-      Config.pwncombatloggers = pwncombatloggers;
+      Config.plugin = pwncombatloggers;
    }
 
    public FileConfiguration getConfig() 
    {
-      return pwncombatloggers.getConfig();
+      return plugin.getConfig();
    }
 
    public void enable() 
    {
 	   
-      if(!pwncombatloggers.getDataFolder().exists()) 
+      if(!plugin.getDataFolder().exists()) 
       {
-         pwncombatloggers.getConfig();
-         pwncombatloggers.saveDefaultConfig();
-         pwncombatloggers.reloadConfig();
+         plugin.getConfig();
+         plugin.saveDefaultConfig();
+         plugin.reloadConfig();
       }
       
       try 
@@ -51,37 +51,37 @@ public class Config
 
    private void addDefaultConfig() throws IOException 
    {
-      File file = new File(pwncombatloggers.getDataFolder(), "latestConfig.yml");
+      File file = new File(plugin.getDataFolder(), "latestConfig.yml");
       if(! file.exists()) 
       {
          file.createNewFile();
       }
-      pwncombatloggers.getConfig().save(file);
+      plugin.getConfig().save(file);
    }
 
    private void disabledCommands() 
    {
-	   pwncombatloggers.disabledCommands = getConfig().getStringList("disabledCommands");
+	   plugin.disabledCommands = getConfig().getStringList("disabledCommands");
    }
    
    private void disabledWorlds() 
    {
-	   pwncombatloggers.disabledWorlds = getConfig().getStringList("disabledWorlds"); 
+	   plugin.disabledWorlds = getConfig().getStringList("disabledWorlds"); 
    }
 
    private void tryUpdate() 
    {
-      if(! new File(pwncombatloggers.getDataFolder(), "config.yml").exists()) 
+      if(! new File(plugin.getDataFolder(), "config.yml").exists()) 
       {
-         pwncombatloggers.saveDefaultConfig();
-         pwncombatloggers.saveConfig();
+         plugin.saveDefaultConfig();
+         plugin.saveConfig();
       }
    }
 
    public void reload()
    {
-      pwncombatloggers.reloadConfig();
-      pwncombatloggers.manageConfig();
+      plugin.reloadConfig();
+      plugin.manageConfig();
    }
 
    public ChatColor parseNameTagColor()
@@ -91,22 +91,22 @@ public class Config
 
    public boolean isPVPWorld(EntityDamageByEntityEvent e) 
    {
-      return !pwncombatloggers.disabledWorlds.contains(e.getEntity().getWorld().getName());
+      return !plugin.disabledWorlds.contains(e.getEntity().getWorld().getName());
    }
 
    public boolean isPVPWorld(World w)
    {
-      return !pwncombatloggers.disabledWorlds.contains(w.getName());
+      return !plugin.disabledWorlds.contains(w.getName());
    }
    
    public boolean isPVPWorld(Player p)
    {
-	  return !pwncombatloggers.disabledWorlds.contains(p.getWorld().getName());
+	  return !plugin.disabledWorlds.contains(p.getWorld().getName());
    }
 
    public boolean isDisabledCommand(String command) 
    {
-      for(String s : pwncombatloggers.disabledCommands)
+      for(String s : plugin.disabledCommands)
       {
          if(command.startsWith("/" + s)) return true;
       }

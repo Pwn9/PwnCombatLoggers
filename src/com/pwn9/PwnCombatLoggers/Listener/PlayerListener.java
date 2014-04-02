@@ -14,46 +14,46 @@ import com.pwn9.PwnCombatLoggers.*;
 public class PlayerListener implements Listener 
 {
    
-   private PwnCombatLoggers pwncombatloggers;
+   private PwnCombatLoggers plugin;
   
    public PlayerListener(PwnCombatLoggers pt) 
    {
-      this.pwncombatloggers = pt;
+      this.plugin = pt;
    }
 
    @EventHandler
    public void onDeath(PlayerRespawnEvent e)
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
-	  
-      pwncombatloggers.safeTimes.remove(e.getPlayer().getName());
-      pwncombatloggers.clearFromBoard(e.getPlayer());
+	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return;
 
-      if(pwncombatloggers.useDeathTP)
+      plugin.safeTimes.remove(e.getPlayer().getName());
+      plugin.clearFromBoard(e.getPlayer());
+
+      if(plugin.useDeathTP)
       {
-         pwncombatloggers.deathTimes.put(e.getPlayer().getName(), pwncombatloggers.calcSafeTime(pwncombatloggers.DEATH_TP_DELAY));
+         plugin.deathTimes.put(e.getPlayer().getName(), plugin.calcSafeTime(plugin.DEATH_TP_DELAY));
       }
    }
 
    @EventHandler
    public void onTpEvent(PlayerTeleportEvent e) 
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
+	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return;
 	  
-      if(!pwncombatloggers.isSafe(e.getPlayer().getName()) && pwncombatloggers.disableTeleport) 
+      if(!plugin.isSafe(e.getPlayer().getName()) && plugin.disableTeleport) 
       {
          e.setCancelled(true);
          e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
       } 
       else 
       {
-         if(pwncombatloggers.deathTimes.containsKey(e.getPlayer().getName()) && pwncombatloggers.useDeathTP) 
+         if(plugin.deathTimes.containsKey(e.getPlayer().getName()) && plugin.useDeathTP) 
          {
-            Long deathTime = pwncombatloggers.deathTimes.get(e.getPlayer().getName());
+            Long deathTime = plugin.deathTimes.get(e.getPlayer().getName());
             Long currTime = System.currentTimeMillis();
             if(deathTime > currTime) 
             {
-               e.getPlayer().sendMessage("§cYou cannot teleport for " + (pwncombatloggers.DEATH_TP_DELAY / 1000) + " seconds after dying. Time left: §6" + (deathTime / 1000 - currTime / 1000));
+               e.getPlayer().sendMessage("§cYou cannot teleport for " + (plugin.DEATH_TP_DELAY / 1000) + " seconds after dying. Time left: §6" + (deathTime / 1000 - currTime / 1000));
                e.setCancelled(true);
             } 
          }
@@ -63,7 +63,7 @@ public class PlayerListener implements Listener
    @EventHandler
    public void entityDeath(EntityDeathEvent e) 
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
+	  if(!plugin.configuration.isPVPWorld(e.getEntity().getWorld())) return;
 	   
       if(e.getEntity() instanceof Zombie) 
       {
@@ -79,9 +79,9 @@ public class PlayerListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onFlight(PlayerToggleFlightEvent e) 
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return;
+	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return;
 	   
-      if(pwncombatloggers.disableFlight && !pwncombatloggers.isSafe(e.getPlayer().getName())) 
+      if(plugin.disableFlight && !plugin.isSafe(e.getPlayer().getName())) 
       {
          e.getPlayer().setFlying(false);
          e.getPlayer().setAllowFlight(false);
@@ -92,9 +92,9 @@ public class PlayerListener implements Listener
    @EventHandler
    public void onProject(ProjectileLaunchEvent e) 
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getEntity().getWorld())) return;
+	  if(!plugin.configuration.isPVPWorld(e.getEntity().getWorld())) return;
 	  
-      if(pwncombatloggers.disableEnderpearls) 
+      if(plugin.disableEnderpearls) 
       {
          if(e.getEntity() instanceof EnderPearl) 
          {
@@ -102,7 +102,7 @@ public class PlayerListener implements Listener
             if(pearl.getShooter() instanceof Player) 
             {
                Player p = (Player)pearl.getShooter();
-               if(!pwncombatloggers.isSafe(p.getName())) e.setCancelled(true);
+               if(!plugin.isSafe(p.getName())) e.setCancelled(true);
             }
          }
       }
@@ -111,9 +111,9 @@ public class PlayerListener implements Listener
    @EventHandler
    public void command(PlayerCommandPreprocessEvent e) 
    {
-	  if(!pwncombatloggers.configuration.isPVPWorld(e.getPlayer())) return; 
+	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return; 
 	  
-      if(pwncombatloggers.configuration.isDisabledCommand(e.getMessage()) && !pwncombatloggers.isSafe(e.getPlayer().getName())) 
+      if(plugin.configuration.isDisabledCommand(e.getMessage()) && !plugin.isSafe(e.getPlayer().getName())) 
       {
     	 e.getPlayer().sendMessage("§cYou cannot use that command whilst in combat!");
          e.setCancelled(true);

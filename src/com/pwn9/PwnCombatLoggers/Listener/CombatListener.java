@@ -10,20 +10,20 @@ import com.pwn9.PwnCombatLoggers.*;
 
 public class CombatListener implements Listener 
 {
-   private PwnCombatLoggers pwncombatloggers;
+   private PwnCombatLoggers plugin;
 
    public CombatListener(PwnCombatLoggers pt) 
    {
-      this.pwncombatloggers = pt;
+      this.plugin = pt;
    }
 
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onHit(EntityDamageByEntityEvent e) 
    {
 
-      if(!pwncombatloggers.configuration.isPVPWorld(e)) return;
+      if(!plugin.configuration.isPVPWorld(e)) return;
       
-      if(!pwncombatloggers.pluginEnabled) return;
+      if(!plugin.pluginEnabled) return;
 
       if(e.getDamager() instanceof Snowball) 
       {
@@ -56,7 +56,7 @@ public class CombatListener implements Listener
          {
             if(PvPLoggerMob.isPvPZombie((Zombie)e.getDamager())) 
             {
-               if(pwncombatloggers.isSafe(hitted.getName())) {
+               if(plugin.isSafe(hitted.getName())) {
             	   e.setCancelled(true);
                }
             }
@@ -68,53 +68,53 @@ public class CombatListener implements Listener
          }
          
          // Check here for reasons why not to allow attack
-         if (!pwncombatloggers.isAttackAllowed(hitter, hitted)) 
+         if (!plugin.isAttackAllowed(hitter, hitted)) 
          {
       	   //PwnCombatLoggers.log(Level.INFO, "Player: " + hitter + " is not allowed to hit " + hitted);
       	   e.setCancelled(true);
          }       
-         else if(!e.isCancelled() && pwncombatloggers.isAttackAllowed(hitter, hitted)) 
+         else if(!e.isCancelled() && plugin.isAttackAllowed(hitter, hitted)) 
          {  
         	//PwnCombatLoggers.log(Level.INFO, "(normal) Player: " + hitter + " has hit " + hitted);
         	
-            if(pwncombatloggers.isSafe(hitted.getName())) 
+            if(plugin.isSafe(hitted.getName())) 
             {
-               pwncombatloggers.addUnsafe(hitted);
+               plugin.addUnsafe(hitted);
             } 
             else 
             {
-               pwncombatloggers.resetSafeTime(hitted);
+               plugin.resetSafeTime(hitted);
             }
             
-            if(pwncombatloggers.isSafe(hitter.getName())) 
+            if(plugin.isSafe(hitter.getName())) 
             {
-               pwncombatloggers.addUnsafe(hitter);
+               plugin.addUnsafe(hitter);
             } 
             else 
             {
-               pwncombatloggers.resetSafeTime(hitter);
+               plugin.resetSafeTime(hitter);
             }	  
          } 
          else 
          {
         	//PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
         	
-            if(!pwncombatloggers.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
+            if(!plugin.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
             {
-               pwncombatloggers.resetSafeTime(hitted);
+               plugin.resetSafeTime(hitted);
                
-               if(pwncombatloggers.isSafe(hitter.getName())) 
+               if(plugin.isSafe(hitter.getName())) 
                {
-                  if(!pwncombatloggers.antiPilejump) 
+                  if(!plugin.antiPilejump) 
                   {
                      e.setCancelled(false);
-                     pwncombatloggers.addUnsafe(hitter);
+                     plugin.addUnsafe(hitter);
                   }
                } 
                else 
                {
                   e.setCancelled(false);
-                  pwncombatloggers.resetSafeTime(hitter);
+                  plugin.resetSafeTime(hitter);
                }
             }
          }

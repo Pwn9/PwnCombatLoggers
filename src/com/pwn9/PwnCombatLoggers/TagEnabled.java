@@ -5,7 +5,7 @@ import org.bukkit.event.*;
 
 public class TagEnabled implements TagAPEye, Listener 
 {
-   private PwnCombatLoggers pwncombatloggers;
+   private PwnCombatLoggers plugin;
 
    @Override
    public void refresh(Player p)
@@ -15,13 +15,13 @@ public class TagEnabled implements TagAPEye, Listener
 
    public TagEnabled(PwnCombatLoggers pt)
    {
-      this.pwncombatloggers = pt;
+      this.plugin = pt;
    }
 
    @EventHandler
    public void onNameTag(org.kitteh.tag.AsyncPlayerReceiveNameTagEvent e)
    {
-      if(!pwncombatloggers.isSafe(e.getNamedPlayer().getName()))
+      if(!plugin.isSafe(e.getNamedPlayer().getName()))
       {
          Player p = e.getNamedPlayer();
          e.setTag(PwnCombatLoggers.nameTagColor + p.getName());
