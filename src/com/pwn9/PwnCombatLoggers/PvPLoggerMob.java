@@ -1,6 +1,5 @@
 package com.pwn9.PwnCombatLoggers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -14,24 +13,25 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class PvPLoggerMob 
 {
 	
    public static Set<PvPLoggerMob> zombies = new HashSet<PvPLoggerMob>();
-   public static Set<String> waitingToDie = new HashSet<String>();
+   public static Set<UUID> waitingToDie = new HashSet<UUID>();
    public static Set<Integer> zombieIds = new HashSet<Integer>();
    public static int HEALTH = 20;
    private double hp = 10;
    private Zombie zombie;
-   private String player;
+   private Player player;
    private ItemStack[] contents;
 
-   public PvPLoggerMob(String player) 
+   public PvPLoggerMob(Player p) 
    {
-      this.player = player;
-      Player p = Bukkit.getPlayer(player);
+      //this.player = player;
+      //Player p = Bukkit.getPlayer(player);
       hp = p.getHealth();
       zombieIds.add((zombie = (Zombie)p.getWorld().spawnEntity(p.getLocation(), EntityType.valueOf(PwnCombatLoggers.mobType))).getEntityId());
       zombie.getWorld().playEffect(zombie.getLocation(), Effect.MOBSPAWNER_FLAMES, 1, 1);
@@ -41,7 +41,7 @@ public class PvPLoggerMob
       while(it.hasNext()) 
       {
          PvPLoggerMob pz = it.next();
-         if(pz.getPlayer().equalsIgnoreCase(player)) 
+         if(pz.getPlayer().equals(player)) 
          {
             despawnDrop(false);
             it.remove();
@@ -60,17 +60,17 @@ public class PvPLoggerMob
       this.zombie = zombie;
    }
 
-   public String getPlayer() 
+   public UUID getPlayer() 
    {
-      return player;
+      return player.getUniqueId();
    }
 
-   public void setPlayer(String player)
+   public void setPlayer(Player player)
    {
       this.player = player;
    }
 
-   @SuppressWarnings("deprecation")
+   //@SuppressWarnings("deprecation")
    public void invFromPlayer(Player p) 
    {
 	  PlayerInventory pi = p.getInventory(); 	   
@@ -142,7 +142,7 @@ public class PvPLoggerMob
    {
       if(giveToOwner)
       {
-         Player p = Bukkit.getPlayer(player);
+         Player p = player;
          if(p == null) 
          {
             PwnCombatLoggers.log(Level.WARNING, "Player was null!");
@@ -166,7 +166,7 @@ public class PvPLoggerMob
       while(it.hasNext()) 
       {
          PvPLoggerMob pz = it.next();
-         if(pz.getPlayer().equalsIgnoreCase(player)) it.remove();
+         if(pz.getPlayer().equals(player)) it.remove();
       }
       zombie.remove();
    }
@@ -215,11 +215,11 @@ public class PvPLoggerMob
      }
    }
 
-   public static PvPLoggerMob getByOwner(String owner) 
+   public static PvPLoggerMob getByOwner(Player p) 
    {
       for(PvPLoggerMob pz : zombies) 
       {
-         if(pz.getPlayer().equalsIgnoreCase(owner)) return pz;
+         if(pz.getPlayer().equals(p.getUniqueId())) return pz;
       }
       return null;
    }
@@ -245,7 +245,7 @@ public class PvPLoggerMob
 
    public void killOwner() 
    {
-      waitingToDie.add(player);
+      waitingToDie.add(player.getUniqueId());
    }
 
    public double getHealth() 

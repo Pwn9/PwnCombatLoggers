@@ -49,7 +49,7 @@ public class Commands
                 } 
                 else 
                 {
-                   if(! plugin.isSafe(p.getName())) 
+                   if(! plugin.isSafe(p.getUniqueId())) 
                    {
                       plugin.callSafe(p);
                       sender.sendMessage("§c" + p.getName() + " is no longer hittable.");
@@ -88,7 +88,7 @@ public class Commands
                }
                else 
                {
-                   if(plugin.isSafe(p.getName())) 
+                   if(plugin.isSafe(p.getUniqueId())) 
                    {
                       p.damage(1);
                       plugin.addUnsafe(p);
