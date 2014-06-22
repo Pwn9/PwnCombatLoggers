@@ -31,7 +31,7 @@ public class PlayerListener implements Listener
 
       if(plugin.useDeathTP)
       {
-         plugin.deathTimes.put(e.getPlayer().getUniqueId(), plugin.calcSafeTime(plugin.DEATH_TP_DELAY));
+         plugin.deathTimes.put(e.getPlayer().getName(), plugin.calcSafeTime(plugin.DEATH_TP_DELAY));
       }
    }
 
@@ -40,7 +40,7 @@ public class PlayerListener implements Listener
    {
 	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return;
 	  
-      if(!plugin.isSafe(e.getPlayer().getUniqueId()) && plugin.disableTeleport) 
+      if(!plugin.isSafe(e.getPlayer().getName()) && plugin.disableTeleport) 
       {
          e.setCancelled(true);
          e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
@@ -81,7 +81,7 @@ public class PlayerListener implements Listener
    {
 	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return;
 	   
-      if(plugin.disableFlight && !plugin.isSafe(e.getPlayer().getUniqueId())) 
+      if(plugin.disableFlight && !plugin.isSafe(e.getPlayer().getName())) 
       {
          e.getPlayer().setFlying(false);
          e.getPlayer().setAllowFlight(false);
@@ -102,7 +102,7 @@ public class PlayerListener implements Listener
             if(pearl.getShooter() instanceof Player) 
             {
                Player p = (Player)pearl.getShooter();
-               if(!plugin.isSafe(p.getUniqueId())) e.setCancelled(true);
+               if(!plugin.isSafe(p.getName())) e.setCancelled(true);
             }
          }
       }
@@ -113,7 +113,7 @@ public class PlayerListener implements Listener
    {
 	  if(!plugin.configuration.isPVPWorld(e.getPlayer())) return; 
 	  
-      if(plugin.configuration.isDisabledCommand(e.getMessage()) && !plugin.isSafe(e.getPlayer().getUniqueId())) 
+      if(plugin.configuration.isDisabledCommand(e.getMessage()) && !plugin.isSafe(e.getPlayer().getName())) 
       {
     	 e.getPlayer().sendMessage("§cYou cannot use that command whilst in combat!");
          e.setCancelled(true);

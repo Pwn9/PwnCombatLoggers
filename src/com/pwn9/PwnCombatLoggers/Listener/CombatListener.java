@@ -56,7 +56,7 @@ public class CombatListener implements Listener
          {
             if(PvPLoggerMob.isPvPZombie((Zombie)e.getDamager())) 
             {
-               if(plugin.isSafe(hitted.getUniqueId())) {
+               if(plugin.isSafe(hitted.getName())) {
             	   e.setCancelled(true);
                }
             }
@@ -77,7 +77,7 @@ public class CombatListener implements Listener
          {  
         	//PwnCombatLoggers.log(Level.INFO, "(normal) Player: " + hitter + " has hit " + hitted);
         	
-            if(plugin.isSafe(hitted.getUniqueId())) 
+            if(plugin.isSafe(hitted.getName())) 
             {
                plugin.addUnsafe(hitted);
             } 
@@ -86,7 +86,7 @@ public class CombatListener implements Listener
                plugin.resetSafeTime(hitted);
             }
             
-            if(plugin.isSafe(hitter.getUniqueId())) 
+            if(plugin.isSafe(hitter.getName())) 
             {
                plugin.addUnsafe(hitter);
             } 
@@ -99,11 +99,11 @@ public class CombatListener implements Listener
          {
         	//PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
         	
-            if(!plugin.isSafe(hitted.getUniqueId()) && hitter.getInventory().getItemInHand() != null) 
+            if(!plugin.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
             {
                plugin.resetSafeTime(hitted);
                
-               if(plugin.isSafe(hitter.getUniqueId())) 
+               if(plugin.isSafe(hitter.getName())) 
                {
                   if(!plugin.antiPilejump) 
                   {

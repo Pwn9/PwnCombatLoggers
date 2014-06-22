@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,8 +43,8 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	public static File dataFolder;
 	public static Boolean logEnabled;	
 	private final Commands Commands = new Commands(this);
-	public HashMap<UUID, Long> safeTimes = new HashMap<UUID, Long>();
-	public HashMap<UUID, Long> deathTimes = new HashMap<UUID, Long>();
+	public HashMap<String, Long> safeTimes = new HashMap<String, Long>();
+	public HashMap<String, Long> deathTimes = new HashMap<String, Long>();
 	private Set<String> couldFly = new HashSet<String>();
 	private Set<String> hadFlight = new HashSet<String>();
 	public static Logger logger;
@@ -135,13 +134,13 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    private void resetNameTagsAuto() 
    {
-      Iterator<UUID> iter = safeTimes.keySet().iterator();
+      Iterator<String> iter = safeTimes.keySet().iterator();
       
       final Objective displaySafeTime = scoreboard.getBoard().getObjective("displaySafeTime");
            
       while(iter.hasNext()) 
       {
-         UUID s = iter.next();
+         String s = iter.next();
          Player player = getServer().getPlayer(s);
    
          if(player == null) 
@@ -150,7 +149,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
             clearFromBoard(p);
             iter.remove();
          } 
-         else if(isSafe(player.getUniqueId())) 
+         else if(isSafe(s)) 
          {
             iter.remove();
             player.sendMessage("§cYou are now safe.");
@@ -163,7 +162,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
             if(safeTimeObjective) 
             {
                long currTime = System.currentTimeMillis();
-               long safeTime = safeTimes.get(player.getUniqueId());
+               long safeTime = safeTimes.get(s);
                displaySafeTime.getScore(player).setScore((int)(safeTime / 1000 - currTime / 1000));
                if (!configuration.getConfig().getBoolean("enableTagAPI"))
                {
@@ -213,10 +212,10 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    void callSafeAllManual() 
    {
-      Iterator<UUID> iter = safeTimes.keySet().iterator();
+      Iterator<String> iter = safeTimes.keySet().iterator();
       while(iter.hasNext()) 
       {
-         UUID s = iter.next();
+         String s = iter.next();
          iter.remove();
          callSafe(getServer().getPlayer(s));
       }
@@ -272,7 +271,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 
    public void resetSafeTime(Player p) 
    {
-      safeTimes.put(p.getUniqueId(), calcSafeTime(SAFE_DELAY));
+      safeTimes.put(p.getName(), calcSafeTime(SAFE_DELAY));
    }
 
    private void unInvis(Player p) 
@@ -302,7 +301,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       }
    }
 
-   public boolean isSafe(UUID player) 
+   public boolean isSafe(String player) 
    {
       if(safeTimes.containsKey(player)) 
       {

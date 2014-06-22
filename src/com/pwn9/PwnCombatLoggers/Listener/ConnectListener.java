@@ -27,14 +27,14 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onJoin(PlayerJoinEvent e) 
    {
-	   if(PvPLoggerMob.waitingToDie.contains(e.getPlayer().getUniqueId())) 
+	   if(PvPLoggerMob.waitingToDie.contains(e.getPlayer().getName())) 
 	   {
 		   e.getPlayer().setHealth(0);
 		   
-		   PvPLoggerMob.waitingToDie.remove(e.getPlayer().getUniqueId());
+		   PvPLoggerMob.waitingToDie.remove(e.getPlayer().getName());
 	   } 	   
 	   
-      PvPLoggerMob pz = PvPLoggerMob.getByOwner(e.getPlayer());
+      PvPLoggerMob pz = PvPLoggerMob.getByOwner(e.getPlayer().getName());
       
       if(pz != null) 
       {
@@ -59,7 +59,7 @@ public class ConnectListener implements Listener
    {
 	   // If a player is being kicked (like during shutdown),
 	   // mark them "safe", so they don't get turned into a Zombie
-	   if (!plugin.isSafe(e.getPlayer().getUniqueId())) 
+	   if (! plugin.isSafe(e.getPlayer().getName())) 
 	   {
 		   plugin.callSafe(e.getPlayer());
 	   }
@@ -68,10 +68,10 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onQuit(PlayerQuitEvent e) 
    {
-      if(!plugin.isSafe(e.getPlayer().getUniqueId()) && plugin.mobEnabled) 
+      if(! plugin.isSafe(e.getPlayer().getName()) && plugin.mobEnabled) 
       {
          lastLogout = System.currentTimeMillis();
-         new PvPLoggerMob(e.getPlayer());
+         new PvPLoggerMob(e.getPlayer().getName());
       }
    }
 
