@@ -142,7 +142,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       {
          String s = iter.next();
          Player player = getServer().getPlayer(s);
-   
+
          if(player == null) 
          {
             OfflinePlayer p = getServer().getOfflinePlayer(s);
