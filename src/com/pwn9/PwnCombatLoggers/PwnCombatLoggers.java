@@ -138,7 +138,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          else if(isSafe(s)) 
          {
             iter.remove();
-            player.sendMessage("§cYou are now safe.");
+            player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
             clearFromBoard(player);
             fixFlying(player);
          } 
@@ -230,15 +230,16 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    {
       addToBoard(p);
       resetSafeTime(p);
-      p.sendMessage("§cYou can now be hit anywhere for at least " + (SAFE_DELAY / 1000) + " seconds!");   
+      p.sendMessage("§0[§cCOMBAT§0]§c You are now in combat for at least " + (SAFE_DELAY / 1000) + " seconds!");   
       removeFlight(p);
       unInvis(p);
    }
 
    private void addToBoard(Player p) 
    {
-      if(safeTimeObjective) 
+	  if(safeTimeObjective) 
       {
+		 PwnCombatLoggers.log(Level.INFO, "Adding player " + p.getName() + " to the scoreboard.");
        	 scoreboard.team.addPlayer(p);
       }
    }
@@ -270,7 +271,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       {
          clearFromBoard(player);
          safeTimes.remove(player.getName());
-         player.sendMessage("§cYou are now safe.");
+         player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
       }
    }
 

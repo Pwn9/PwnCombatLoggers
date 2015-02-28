@@ -1,5 +1,7 @@
 package com.pwn9.PwnCombatLoggers.Listener;
 
+import java.util.logging.Level;
+
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -70,12 +72,12 @@ public class CombatListener implements Listener
          // Check here for reasons why not to allow attack
          if (!plugin.isAttackAllowed(hitter, hitted)) 
          {
-      	   //PwnCombatLoggers.log(Level.INFO, "Player: " + hitter + " is not allowed to hit " + hitted);
+      	   PwnCombatLoggers.log(Level.INFO, "Player: " + hitter + " is not allowed to hit " + hitted);
       	   e.setCancelled(true);
          }       
          else if(!e.isCancelled() && plugin.isAttackAllowed(hitter, hitted)) 
          {  
-        	//PwnCombatLoggers.log(Level.INFO, "(normal) Player: " + hitter + " has hit " + hitted);
+        	PwnCombatLoggers.log(Level.INFO, "(normal) Player: " + hitter + " has hit " + hitted);
         	
             if(plugin.isSafe(hitted.getName())) 
             {
@@ -97,7 +99,7 @@ public class CombatListener implements Listener
          } 
          else 
          {
-        	//PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
+        	PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
         	
             if(!plugin.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
             {
