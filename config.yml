@@ -37,6 +37,9 @@ tagTime: 20
 # Use the scoreboard to display time left til the tag wears off
 displayTagTime: true
 
+# Use TagAPI, if set false plugin will fallback to scoreboard
+enableTagAPI: true
+
 # Enable death TP timer
 deathTPEnabled: true
 
