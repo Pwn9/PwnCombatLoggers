@@ -72,7 +72,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	private SimpleClans sc;
 	
 	// TagAPI hook
-	private TagAPEye tagApi;
+	//private TagAPEye tagApi;
    
 	public void onEnable() 
 	{
@@ -92,7 +92,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	private void manageInstances() 
 	{
 	  // Setup TagAPI
-	  if(configuration.getConfig().getBoolean("enableTagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
+	  /*if(configuration.getConfig().getBoolean("enableTagAPI") && getServer().getPluginManager().getPlugin("TagAPI") != null) 
 	  {
 	     this.tagApi = new TagEnabled(this);
 	  } 
@@ -101,6 +101,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	     this.tagApi = new TagDisabled();
 	  }
 	  getServer().getPluginManager().registerEvents(tagApi, this);
+	  */
 	  
 	  // Check for SimpleClans
 	  Plugin plug = getServer().getPluginManager().getPlugin("SimpleClans");
@@ -155,7 +156,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
             player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
             clearFromBoard(player);
             fixFlying(player);
-            refresh(player);
+            //refresh(player);
          } 
          else  
          {
@@ -164,11 +165,12 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
                long currTime = System.currentTimeMillis();
                long safeTime = safeTimes.get(s);
                displaySafeTime.getScore(player).setScore((int)(safeTime / 1000 - currTime / 1000));
-               if (!configuration.getConfig().getBoolean("enableTagAPI"))
-               {
-                   scoreboard.team.addPlayer(player);   
-               }
+               //if (!configuration.getConfig().getBoolean("enableTagAPI"))
+               //{
+               scoreboard.team.addPlayer(player);   
+               //}
             }
+            scoreboard.combatants.addPlayer(player);
          }
       }
    }
@@ -188,10 +190,11 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          {
             ((Player)player).setScoreboard(getServer().getScoreboardManager().getNewScoreboard());
             scoreboard.getBoard().resetScores(player);
-            if (!configuration.getConfig().getBoolean("enableTagAPI")) 
-            {
-            	scoreboard.team.removePlayer(player);
-            }
+            //if (!configuration.getConfig().getBoolean("enableTagAPI")) 
+            //{
+            scoreboard.team.removePlayer(player);
+            //}
+            scoreboard.combatants.removePlayer(player);
          }
       }
    }
@@ -244,7 +247,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          {
             resetNameTagsAuto();
          }
-      }, 40L, 40L);
+      }, 20L, 20L);
    }
 
    public void addUnsafe(Player p) 
@@ -253,7 +256,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       resetSafeTime(p);
       p.sendMessage("§0[§cCOMBAT§0]§c You are now in combat for at least " + (SAFE_DELAY / 1000) + " seconds!");   
       removeFlight(p);
-      refresh(p);
+      //refresh(p);
       unInvis(p);
    }
 
@@ -263,10 +266,11 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       {
 		 PwnCombatLoggers.log(Level.INFO, "Adding player " + p.getName() + " to the scoreboard.");
          p.setScoreboard(scoreboard.getBoard());
-         if (!configuration.getConfig().getBoolean("enableTagAPI")) 
-         {
+         //if (!configuration.getConfig().getBoolean("enableTagAPI")) 
+         //{
         	 scoreboard.team.addPlayer(p);
-         }
+         //}
+        	 scoreboard.combatants.addPlayer(p);
 
       }
    }
@@ -299,7 +303,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          clearFromBoard(player);
          safeTimes.remove(player.getName());
          player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
-         refresh(player);
+         //refresh(player);
       }
    }
 
@@ -323,10 +327,10 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       return System.currentTimeMillis() + time;
    }
 
-   void refresh(Player p) 
-   {
-      tagApi.refresh(p);
-   }
+   //void refresh(Player p) 
+   // {
+      //tagApi.refresh(p);
+   //}
 
    public void setNameTagColor(ChatColor nameTagColor) 
    {

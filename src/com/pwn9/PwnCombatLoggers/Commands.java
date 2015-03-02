@@ -53,7 +53,7 @@ public class Commands
                    {
                       plugin.callSafe(p);
                       sender.sendMessage("§c" + p.getName() + " is no longer hittable.");
-                      plugin.refresh(p);
+                      //plugin.refresh(p);
                    } 
                    else 
                    {
