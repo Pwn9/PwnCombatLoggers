@@ -10,6 +10,7 @@ import org.bukkit.scoreboard.Team;
 public class ScoreboardFeatures 
 {
 	private Scoreboard board;
+	//private Scoreboard globalboard;
 	
 	public Team team;
 	public Team combatants;
@@ -22,6 +23,7 @@ public class ScoreboardFeatures
 		String teamprefix = PwnCombatLoggers.nameTagColor.toString();
 		
 		board = manager.getNewScoreboard();
+		//globalboard = manager.getNewScoreboard();
 		
 		team = board.registerNewTeam("In Combat");
 		team.setPrefix(teamprefix);   

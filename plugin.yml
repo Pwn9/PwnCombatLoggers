@@ -1,10 +1,9 @@
 name: PwnCombatLoggers
-version: 0.9.6
+version: 0.9.7
 author: tremor77
 description: Prevent players from logging out of PvP or escaping to safe zones
 website: http://pwn9.com
 main: com.pwn9.PwnCombatLoggers.PwnCombatLoggers
-softdepend: [TagAPI]
 commands:
    callsafe:
       description: Make a player safe from attack

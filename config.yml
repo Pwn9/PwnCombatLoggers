@@ -37,9 +37,6 @@ tagTime: 20
 # Use the scoreboard to display time left til the tag wears off
 displayTagTime: true
 
-# Use TagAPI, if set false plugin will fallback to scoreboard - wont work after 1.8
-enableTagAPI: false
-
 # Enable death TP timer
 deathTPEnabled: true
 
