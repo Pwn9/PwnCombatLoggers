@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 import com.pwn9.PwnCombatLoggers.*;
 
@@ -19,6 +20,17 @@ public class CombatListener implements Listener
       this.plugin = pt;
    }
 
+   @EventHandler
+   public void playerDied(PlayerDeathEvent event)
+   {   
+       Player player = event.getEntity();
+	   
+       if(!plugin.configuration.isPVPWorld(player)) return;
+	   
+       plugin.clearFromBoard(player);
+       plugin.safeTimes.remove(player.getName());
+   }
+   
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onHit(EntityDamageByEntityEvent e) 
    {

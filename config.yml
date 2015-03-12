@@ -36,13 +36,7 @@ tagTime: 20
 
 # Use the scoreboard to display time left til the tag wears off
 displayTagTime: true
-
-# Enable death TP timer
-deathTPEnabled: true
-
-# Time in seconds, a player is not allowed to teleport after dying
-deathTPTime: 20  
-       
+    
 # Enable replacing players who log out of combat with a mob
 mobEnabled: true
 

@@ -27,6 +27,8 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onJoin(PlayerJoinEvent e) 
    {
+	   e.getPlayer().setScoreboard(ScoreboardFeatures.getBoard()); 
+	   
 	   if(PvPLoggerMob.waitingToDie.contains(e.getPlayer().getName())) 
 	   {
 		   e.getPlayer().setHealth(0);

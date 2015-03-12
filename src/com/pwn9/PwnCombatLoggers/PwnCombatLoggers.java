@@ -1,6 +1,5 @@
 package com.pwn9.PwnCombatLoggers;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
@@ -53,11 +52,9 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	public Config configuration;
 	public static ChatColor nameTagColor;
 	public long SAFE_DELAY = 20000;
-	public long DEATH_TP_DELAY = 20000;
 	public boolean pluginEnabled = true;   
 	public boolean disableTeleport = false;
 	public boolean removeInvis = false;   
-	public boolean useDeathTP = true;
 	public boolean disableFlight = true;
 	public boolean antiPilejump = false;
 	public boolean mobEnabled = true; 
@@ -109,8 +106,6 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       this.disableFlight = configuration.getConfig().getBoolean("disableFlying", true);
       this.antiPilejump = configuration.getConfig().getBoolean("antiPilejump", true);
       this.disableEnderpearls = configuration.getConfig().getBoolean("disableEnderpearls", false);
-      this.DEATH_TP_DELAY = configuration.getConfig().getInt("deathTPTime", 20) * 1000;
-      useDeathTP = configuration.getConfig().getBoolean("deathTPEnabled", true); 
       this.mobEnabled = configuration.getConfig().getBoolean("mobEnabled", true);
       PwnCombatLoggers.mobType = configuration.getConfig().getString("mobType", "ZOMBIE");
       PvPLoggerMob.HEALTH = configuration.getConfig().getInt("maxHealth", 20);
@@ -123,7 +118,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    {
       Iterator<String> iter = safeTimes.keySet().iterator();
       
-      final Objective displaySafeTime = scoreboard.getBoard().getObjective("displaySafeTime");
+      final Objective displaySafeTime = ScoreboardFeatures.getBoard().getObjective("displaySafeTime");
            
       while(iter.hasNext()) 
       {
@@ -141,6 +136,8 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
             iter.remove();
             player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
             clearFromBoard(player);
+            //player.setPlayerListName(ChatColor.WHITE + player.getName() + ChatColor.WHITE);
+            //player.setDisplayName(ChatColor.WHITE + player.getName() + ChatColor.WHITE); 
             fixFlying(player);
          } 
          else  
@@ -152,11 +149,13 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
                displaySafeTime.getScore(player).setScore((int)(safeTime / 1000 - currTime / 1000));
                scoreboard.team.addPlayer(player);   
             }
-            scoreboard.combatants.addPlayer(player);
+            //scoreboard.combatants.addPlayer(player);
+            //player.setPlayerListName(PwnCombatLoggers.nameTagColor + player.getName() + ChatColor.WHITE);
+            //player.setDisplayName(PwnCombatLoggers.nameTagColor + player.getName() + ChatColor.WHITE);
          }
       }
    }
-
+   
    public void clearFromBoard(OfflinePlayer player) 
    {
 	  World world = null;
@@ -170,10 +169,16 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       {
          if(player instanceof Player) 
          {
-            ((Player)player).setScoreboard(getServer().getScoreboardManager().getNewScoreboard());
-            scoreboard.getBoard().resetScores(player);
+        	// blank this players board? 
+            //((Player)player).setScoreboard(getServer().getScoreboardManager().getNewScoreboard());
+            
+            // reset the scores 
+            ScoreboardFeatures.getBoard().resetScores(player);
+            
+            // remove the player from the team
             scoreboard.team.removePlayer(player);
-            scoreboard.combatants.removePlayer(player);
+            //scoreboard.safeteam.addPlayer(player);
+            //scoreboard.combatants.removePlayer(player);
          }
       }
    }
@@ -226,9 +231,10 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          {
             resetNameTagsAuto();
 
-            for(Player player: Bukkit.getOnlinePlayers()){
-                player.setScoreboard(scoreboard.getBoard());            
-            }
+            // this just forces all players onto the same scoreboard - could be a better way?
+            // for(Player player: Bukkit.getOnlinePlayers()){
+               //player.setScoreboard(scoreboard.getBoard());   
+            //}
          }
       }, 1, 20);      
    }
@@ -247,9 +253,9 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
 	  if(safeTimeObjective) 
       {
 		 PwnCombatLoggers.log(Level.INFO, "Adding player " + p.getName() + " to the scoreboard.");
-         p.setScoreboard(scoreboard.getBoard());
+         p.setScoreboard(ScoreboardFeatures.getBoard());
     	 scoreboard.team.addPlayer(p);
-    	 scoreboard.combatants.addPlayer(p);
+    	 //scoreboard.combatants.addPlayer(p);
       }
    }
 

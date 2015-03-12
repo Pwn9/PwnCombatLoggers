@@ -28,11 +28,6 @@ public class PlayerListener implements Listener
 
       plugin.safeTimes.remove(e.getPlayer().getName());
       plugin.clearFromBoard(e.getPlayer());
-
-      if(plugin.useDeathTP)
-      {
-         plugin.deathTimes.put(e.getPlayer().getName(), plugin.calcSafeTime(plugin.DEATH_TP_DELAY));
-      }
    }
 
    @EventHandler
@@ -45,19 +40,6 @@ public class PlayerListener implements Listener
          e.setCancelled(true);
          e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
       } 
-      else 
-      {
-         if(plugin.deathTimes.containsKey(e.getPlayer().getName()) && plugin.useDeathTP) 
-         {
-            Long deathTime = plugin.deathTimes.get(e.getPlayer().getName());
-            Long currTime = System.currentTimeMillis();
-            if(deathTime > currTime) 
-            {
-               e.getPlayer().sendMessage("§cYou cannot teleport for " + (plugin.DEATH_TP_DELAY / 1000) + " seconds after dying. Time left: §6" + (deathTime / 1000 - currTime / 1000));
-               e.setCancelled(true);
-            } 
-         }
-      }
    }
 
    @EventHandler

@@ -9,11 +9,12 @@ import org.bukkit.scoreboard.Team;
 
 public class ScoreboardFeatures 
 {
-	private Scoreboard board;
+	private static Scoreboard board;
 	//private Scoreboard globalboard;
 	
 	public Team team;
-	public Team combatants;
+	//public Team combatants;
+	//public Team safeteam;
 	
 	public ScoreboardFeatures(boolean safeTime) 
 	{
@@ -27,25 +28,31 @@ public class ScoreboardFeatures
 		
 		team = board.registerNewTeam("In Combat");
 		team.setPrefix(teamprefix);   
-
+		//safeteam = board.registerNewTeam("Safe");
+		//safeteam.setPrefix("WHITE");   
+		
 		if(safeTime) 
 		{
 			board.registerNewObjective("displaySafeTime", "dummy");
 			Objective objective = board.getObjective("displaySafeTime");
 			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-			objective.setDisplayName("Safe Times:"); 
+			objective.setDisplayName("[In Combat : Time Left]"); 
 		}
 		
-		Objective ob = board.registerNewObjective("setNameColor", "dummy");
-		ob.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-		combatants = board.registerNewTeam("Combatants");
-		combatants.setPrefix(teamprefix); 
-		
+		//Objective ob = board.registerNewObjective("setNameColor", "dummy");
+		//ob.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+		//combatants = board.registerNewTeam("Combatants");
+		//combatants.setPrefix(teamprefix); 
+
 	}
 
-	public Scoreboard getBoard() 
+	public static Scoreboard getBoard() 
 	{
 		return board;
 	}
-   
+
+	//public Scoreboard getGlobalBoard() 
+	//{
+	//	return globalboard;
+	//}
 }
