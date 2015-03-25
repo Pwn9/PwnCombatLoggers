@@ -81,6 +81,8 @@ public class CombatListener implements Listener
             return;
          }
          
+         
+         
          // Check here for reasons why not to allow attack
          if (!plugin.isAttackAllowed(hitter, hitted)) 
          {
@@ -113,7 +115,7 @@ public class CombatListener implements Listener
          {
         	PwnCombatLoggers.log(Level.INFO, "(cancel) Player: " + hitter + " has hit " + hitted);
         	
-            if(!plugin.isSafe(hitted.getName()) && hitter.getInventory().getItemInHand() != null) 
+            if(!plugin.isSafe(hitted.getName())) 
             {
                plugin.resetSafeTime(hitted);
                
@@ -132,7 +134,6 @@ public class CombatListener implements Listener
                }
             }
          }
-         
       }
    }
 }

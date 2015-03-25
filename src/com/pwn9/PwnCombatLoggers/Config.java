@@ -46,13 +46,12 @@ public class Config
       tryUpdate();
       disabledWorlds();
       disabledCommands();
-   
    }
 
    private void addDefaultConfig() throws IOException 
    {
       File file = new File(plugin.getDataFolder(), "latestConfig.yml");
-      if(! file.exists()) 
+      if(!file.exists()) 
       {
          file.createNewFile();
       }
@@ -112,4 +111,5 @@ public class Config
       }
       return false;   
    }
+   
 }

@@ -1,5 +1,5 @@
 name: PwnCombatLoggers
-version: 0.9.8
+version: 0.9.9
 author: tremor77
 description: Prevent players from logging out of PvP or escaping to safe zones
 website: http://pwn9.com
@@ -11,6 +11,12 @@ commands:
       usage: /callsafe <player>
       permission: pwncl.callsafe
       permission-message: You dont have permission for this command
+   callclear:
+      description: Remove a player from the PwnCombatLogger Scoreboard
+      aliases: cclear
+      usage: /callclear <player>
+      permission: pwncl.callclear
+      permission-message: You dont have permission for this command      
    callhit:
       description: Make a player vulnerable to attack
       aliases: chit
@@ -22,7 +28,6 @@ commands:
       usage: /pwncl <reload|setcolor <color>>
       permission: pwncl.pwncl
       permission-message: You dont have permission for this command
-      
 permissions:
   pwncl.*:
     description: gives all permissions of PwnCombatLoggers
@@ -31,6 +36,7 @@ permissions:
         pwncl.pwncl: true
         pwncl.callhit: true
         pwncl.callsafe: true
+        pwncl.callclear: true        
         pwncl.notag: true
   pwnncl.notag:
     description: Gives permission to not get tagged    

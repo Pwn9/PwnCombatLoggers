@@ -38,7 +38,7 @@ public class PlayerListener implements Listener
       if(!plugin.isSafe(e.getPlayer().getName()) && plugin.disableTeleport) 
       {
          e.setCancelled(true);
-         e.getPlayer().sendMessage(ChatColor.RED + "You cannot teleport until you are safe.");
+         e.getPlayer().sendMessage("§0[§cCOMBAT§0]§c You cannot teleport until you are safe.");
       } 
    }
 
@@ -97,7 +97,7 @@ public class PlayerListener implements Listener
 	  
       if(plugin.configuration.isDisabledCommand(e.getMessage()) && !plugin.isSafe(e.getPlayer().getName())) 
       {
-    	 e.getPlayer().sendMessage("§cYou cannot use that command whilst in combat!");
+    	 e.getPlayer().sendMessage("§0[§cCOMBAT§0]§c You cannot use that command whilst in combat!");
          e.setCancelled(true);
       }
    }

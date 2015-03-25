@@ -3,7 +3,6 @@ package com.pwn9.PwnCombatLoggers;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -157,14 +156,7 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
    }
    
    public void clearFromBoard(OfflinePlayer player) 
-   {
-	  World world = null;
-	  if (player.isOnline()) 
-	  {
-		  world = player.getPlayer().getWorld();
-		  if (!this.configuration.isPVPWorld(world)) return;
-	  }
-	  
+   {  
       if(safeTimeObjective) 
       {
          if(player instanceof Player) 
@@ -248,6 +240,15 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
       unInvis(p);
    }
 
+   public void addUnsafeReconnect(Player p) 
+   {
+      addToBoard(p);
+      resetSafeTime(p);
+      p.sendMessage("§0[§cCOMBAT§0]§c For logging out during combat you are back in combat for " + (SAFE_DELAY / 1000) + " seconds!");   
+      removeFlight(p);
+      unInvis(p);
+   }
+   
    private void addToBoard(Player p) 
    {
 	  if(safeTimeObjective) 
@@ -289,7 +290,8 @@ public class PwnCombatLoggers extends JavaPlugin implements Listener
          player.sendMessage("§0[§cCOMBAT§0]§c You are now out of combat!");
       }
    }
-
+   // need a method to call a player who's name is stuck on the board safe, or to clear the board.
+    
    public boolean isSafe(String player) 
    {
       if(safeTimes.containsKey(player)) 

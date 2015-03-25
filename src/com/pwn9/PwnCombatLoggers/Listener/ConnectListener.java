@@ -18,7 +18,8 @@ public class ConnectListener implements Listener
 {
    private PwnCombatLoggers plugin;
    private long lastLogout = System.currentTimeMillis();
-
+   ScoreboardFeatures scoreboard;
+   
    public ConnectListener(PwnCombatLoggers pt) 
    {
       this.plugin = pt;
@@ -49,8 +50,9 @@ public class ConnectListener implements Listener
                  
          pz.despawnNoDrop(true, true);
          
-    	 // this method is breaking
-         plugin.addUnsafe(e.getPlayer());
+    	 // this method is breaking 
+         // trying this to fix
+         plugin.addUnsafeReconnect(e.getPlayer());
          
          e.getPlayer().setHealth(pz.getHealthForOwner());
       }
@@ -61,7 +63,7 @@ public class ConnectListener implements Listener
    {
 	   // If a player is being kicked (like during shutdown),
 	   // mark them "safe", so they don't get turned into a Zombie
-	   if (! plugin.isSafe(e.getPlayer().getName())) 
+	   if (!plugin.isSafe(e.getPlayer().getName())) 
 	   {
 		   plugin.callSafe(e.getPlayer());
 	   }
@@ -70,10 +72,19 @@ public class ConnectListener implements Listener
    @EventHandler
    public void onQuit(PlayerQuitEvent e) 
    {
-      if(! plugin.isSafe(e.getPlayer().getName()) && plugin.mobEnabled) 
+      if(!plugin.isSafe(e.getPlayer().getName()) && plugin.mobEnabled) 
       {
          lastLogout = System.currentTimeMillis();
          new PvPLoggerMob(e.getPlayer().getName());
+         
+         // Remove from board while logged out
+         // scoreboard.team.removePlayer(e.getPlayer());      
+         plugin.clearFromBoard(e.getPlayer());
+      }    
+      
+      else if (!plugin.isSafe(e.getPlayer().getName())) 
+      {
+    	  plugin.clearFromBoard(e.getPlayer());
       }
    }
 

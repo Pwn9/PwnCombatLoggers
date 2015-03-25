@@ -1,6 +1,7 @@
 package com.pwn9.PwnCombatLoggers;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -28,6 +29,9 @@ public class Commands
 	  	case "callsafe": 
 	  		callsafe(sender, cmd, commandLabel, args);
 	  		break;
+	  	case "callclear": 
+	  		callclear(sender, cmd, commandLabel, args);
+	  		break;	  		
 	  	case "pwncl":
 	  		pwncl(sender, cmd, commandLabel, args);
 	  		break;	  		
@@ -45,19 +49,23 @@ public class Commands
                 Player p = plugin.getServer().getPlayer(args[0]);
                 if(p == null) 
                 {
-                   sender.sendMessage("§cYou must specify an online player.");
+                   // might allow callsafe method on offline player
+                   sender.sendMessage("§0[§cCOMBAT§0]§c You should specify an online player, trying anyway.");
+                   OfflinePlayer po = plugin.getServer().getOfflinePlayer(args[0]);
+                   plugin.clearFromBoard(po);
+                   plugin.safeTimes.remove(po.getName());
                 } 
                 else 
                 {
                    if(! plugin.isSafe(p.getName())) 
                    {
                       plugin.callSafe(p);
-                      sender.sendMessage("§c" + p.getName() + " is no longer hittable.");
+                      sender.sendMessage("§0[§cCOMBAT§0]§c " + p.getName() + " is no longer hittable.");
                       //plugin.refresh(p);
                    } 
                    else 
                    {
-                      sender.sendMessage("§c" + p.getName() + " was not hittable.");
+                      sender.sendMessage("§0[§cCOMBAT§0]§c " + p.getName() + " was not hittable.");
                    }
                 }
              } 
@@ -68,7 +76,29 @@ public class Commands
           } 
           else
           {
-             sender.sendMessage("§cUsage: /callsafe [name] or /callsafe all");
+             sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /callsafe [name] or /callsafe all");
+          }
+       } 	   
+   }
+   
+
+   public static void callclear(CommandSender sender, Command cmd, String commandLabel, String[] args) 
+   {
+       if(sender.hasPermission("pwncl.callclear") || sender instanceof ConsoleCommandSender)
+       {
+          if(args.length == 1) 
+          {
+            OfflinePlayer p = plugin.getServer().getOfflinePlayer(args[0]);
+            if(p != null) 
+            {
+               // might allow callsafe method on offline player
+               sender.sendMessage("§0[§cCOMBAT§0]§c Trying to clear player from board.");
+               plugin.clearFromBoard(p);
+            } 
+          } 
+          else
+          {
+             sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /callclear [name]");
           }
        } 	   
    }
@@ -84,7 +114,7 @@ public class Commands
                p = plugin.getServer().getPlayer(args[0]);
                if(p == null)
                {
-                  sender.sendMessage("§cYou must specify an online player.");
+                  sender.sendMessage("§0[§cCOMBAT§0]§c You must specify an online player.");
                }
                else 
                {
@@ -98,7 +128,7 @@ public class Commands
             }
             else
             {
-               sender.sendMessage("§cUsage: /callhit [name]");
+               sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /callhit [name]");
             }                    
        }
    }
@@ -111,12 +141,12 @@ public class Commands
              if(args[0].equalsIgnoreCase("reload")) 
              {
                 plugin.configuration.reload();
-                sender.sendMessage("§cSettings reloaded!");
+                sender.sendMessage("§0[§cCOMBAT§0]§c Settings reloaded!");
              } 
              else if(args[0].equalsIgnoreCase("save")) 
              {
                 plugin.saveConfig();
-                sender.sendMessage("§cConfig saved!");
+                sender.sendMessage("§0[§cCOMBAT§0]§c Config saved!");
              }             
              else if(args[0].equalsIgnoreCase("setcolor")) 
              {
@@ -128,17 +158,17 @@ public class Commands
                     {
 	                   plugin.setNameTagColor(ChatColor.getByChar(args[1]));
 	                   plugin.configuration.getConfig().set("tagColor", plugin.getNameTagColor().getChar());
-	                   sender.sendMessage("§cColor changed to: " + plugin.getNameTagColor() + "THIS.");
+	                   sender.sendMessage("§0[§cCOMBAT§0]§c Color changed to: " + plugin.getNameTagColor() + "THIS.");
 	                   plugin.saveConfig();
                     }
                     else 
                     {
-                    	sender.sendMessage("§cUsage: /pwncl setcolor <colors: 0 - 9, a - f>");
+                    	sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl setcolor <colors: 0 - 9, a - f>");
                     }
                 }
                 else 
                 {
-                	sender.sendMessage("§cUsage: /pwncl setcolor <color>");
+                	sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl setcolor <color>");
                 }
              } 
              else if(args[0].equalsIgnoreCase("safetime")) 
@@ -151,28 +181,28 @@ public class Commands
                     {
                     	int newtime = Integer.parseInt(args[1]);
 	                    plugin.configuration.getConfig().set("tagTime", newtime);
-	                    sender.sendMessage("§cSafe Time changed to: " + args[1] +" seconds.");
+	                    sender.sendMessage("§0[§cCOMBAT§0]§c Safe Time changed to: " + args[1] +" seconds.");
 	                    plugin.saveConfig();
 	                    plugin.reloadConfig();
                     }
                     else 
                     {
-                    	sender.sendMessage("§cUsage: /pwncl safetime <secs: 0 - 999>");	
+                    	sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl safetime <secs: 0 - 999>");	
                     }
                 }
                 else 
                 {
-                	sender.sendMessage("§cUsage: /pwncl safetime <secs>");
+                	sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl safetime <secs>");
                 }
              }
              else
              {
-                sender.sendMessage("§cUsage: /pwncl [reload|setcolor <color>|safetime <secs>]");
+                sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl [reload|setcolor <color>|safetime <secs>]");
              }               
           }
           else
           {
-             sender.sendMessage("§cUsage: /pwncl [reload|setcolor <color>|safetime <secs>]");
+             sender.sendMessage("§0[§cCOMBAT§0]§c Usage: /pwncl [reload|setcolor <color>|safetime <secs>]");
           }            
        }	   
    }

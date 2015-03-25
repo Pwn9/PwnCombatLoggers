@@ -36,7 +36,7 @@ public class ScoreboardFeatures
 			board.registerNewObjective("displaySafeTime", "dummy");
 			Objective objective = board.getObjective("displaySafeTime");
 			objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-			objective.setDisplayName("[In Combat : Time Left]"); 
+			objective.setDisplayName("[In Combat : Time]"); 
 		}
 		
 		//Objective ob = board.registerNewObjective("setNameColor", "dummy");
